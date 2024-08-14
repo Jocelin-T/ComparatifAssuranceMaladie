@@ -2,7 +2,16 @@
 
 // Compart la primes des assurances maladie
 // 
+// *** Les primes *** //
 //
+// La prime maladie est le montant que vous devez verser chaque mois
+//  à votre caisse-maladie.
+// 
+// Ce montant dépend de la caisse à laquelle vous êtes affilié,
+//  de la franchise et du modèle d’assurance choisis ainsi que de votre lieu de domicile.
+// Les enfants et les jeunes de moins de 25 ans bénéficient de primes plus basses.
+
+
 // *** La franchise *** //
 // 
 // La franchise est le montant que vous devez payer vous-même chaque
@@ -19,7 +28,7 @@
 
 
 // *** La quote-part *** //
-
+// 
 // Une fois la franchise atteinte, 
 //	vous ne payez plus qu’une quote-part de 10 % des frais,
 //	plafonnée à 700 francs par an(350 francs pour les enfants).
