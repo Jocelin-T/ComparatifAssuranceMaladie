@@ -24,12 +24,24 @@
     <ClCompile Include="ConsoleView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DbConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManagement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HealthInsurance.h">
+    <ClInclude Include="HealthInsurance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleView.h">
+    <ClInclude Include="ConsoleView.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DbConnection.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManagement.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

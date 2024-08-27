@@ -1,4 +1,9 @@
 #include <iostream>
+#include <Windows.h>
+#include <stdlib.h>
+
+#include "DbConnection.hpp"
+#include "FileManagement.hpp"
 
 // Compart la primes des assurances maladie
 // 
@@ -36,9 +41,39 @@
 //	auquel s’ajoutent 700 francs de quote-part.
 
 
-int main(){
+int main(int argc, char* argv[]){
 
-	std::cout << "Hello World\n";
+    //// Color of the console 
+    //HANDLE console_color;
+    //console_color = GetStdHandle(
+    //    STD_OUTPUT_HANDLE);
 
+    //// Print different colors from 1 
+    //// to 50 on the output screen 
+    //for (int P = 0; P < 100; P++) {
+
+    //    // P is color code of the 
+    //    // corresponding color 
+    //    SetConsoleTextAttribute(console_color, P);
+
+	   // std::cout << P << " Hello World\n";
+    //}
+
+    db::SqlConnection con;
+    con.CreateTables();
+    con.InsertData();
+    con.ReadAllData("inventory");
+    con.UpdateData();
+    con.ReadAllData("inventory");
+    con.DeleteData();
+    con.ReadAllData("inventory");
+
+    // Test to read external file (file at same place as .exe)
+    ext::FileManagement file;
+    file.readFileInCmdLine(argc, argv);
+
+    // C:\Users\ThJo\source\repos\ComparatifAssuranceMaladie\x64\Release\textfile.txt
+    file.getFileFromUser();
+    
 	return 0;
 }

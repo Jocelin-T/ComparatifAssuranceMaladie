@@ -15,13 +15,19 @@
 namespace bll {
 
 	// Deductible => Franchise
+	// Bonus => Primes
 	struct Deductible;
 
 	struct Deductible {
 		std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
+		float m_deductible_0{ 0.0f };
+		float m_deductible_100{ 0.0f };
+		float m_deductible_200{ 0.0f };
 		float m_deductible_300{ 0.0f };
+		float m_deductible_400{ 0.0f };
 		float m_deductible_500{ 0.0f };
+		float m_deductible_600{ 0.0f };
 		float m_deductible_1000{ 0.0f };
 		float m_deductible_1500{ 0.0f };
 		float m_deductible_2000{ 0.0f };
@@ -33,7 +39,6 @@ namespace bll {
 
 	class HealthInsurance{
 	public:
-
 		// --- option vector ptr --- 
 		std::unique_ptr<std::vector<Deductible>> p_deductibles = std::make_unique<std::vector<Deductible>>();
 
@@ -42,9 +47,11 @@ namespace bll {
 		// --- option region vector ---
 		std::vector<Deductible> m_region_1;
 		std::vector<Deductible> m_region_2;
+
 		std::string m_insurance_name{ "n/a" };
 		std::string m_state{ "n/a" };
 		std::string m_year{ "2024" };
+		const float m_MAX_SHARE{ 700.0f };
 
 		// --- option age ---
 		// age >= 25 years 

@@ -11,8 +11,11 @@
 #include <vector>
 
 
+namespace gui {
+	class ConsoleView{
 
-class ConsoleView
-{
-};
+
+
+	};
+} // namespace gui
 
