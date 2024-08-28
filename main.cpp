@@ -61,12 +61,12 @@ int main(int argc, char* argv[]){
 
     db::SqlConnection con;
     con.CreateTables();
-    con.InsertData();
-    con.ReadAllData("inventory");
-    con.UpdateData();
-    con.ReadAllData("inventory");
-    con.DeleteData();
-    con.ReadAllData("inventory");
+    //con.InsertData();
+    //con.ReadAllData("inventory");
+    //con.UpdateData();
+    //con.ReadAllData("inventory");
+    //con.DeleteData();
+    //con.ReadAllData("inventory");
 
     // Test to read external file (file at same place as .exe)
     ext::FileManagement file;

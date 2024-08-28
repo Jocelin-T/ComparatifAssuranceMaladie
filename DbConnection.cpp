@@ -9,7 +9,11 @@ namespace db {
     const std::string DATABASE_NAME = "health_insurance";
 
     // Tables name
-    const std::string TABLE_INVENTORY{ "inventory" };
+    const std::string TABLE_INSURANCE{ "insurance" }; // hold insurances name
+    const std::string TABLE_BONUS{ "bonus" };
+    const std::string TABLE_AGE{ "age" };
+    const std::string TABLE_DEDUCTIBLE{ "deductible" };
+
 
 
     // Constructor
@@ -56,20 +60,67 @@ namespace db {
             return;
         }
 
-        std::unique_ptr<sql::Statement> p_statement(m_p_connection->createStatement());
+        try {
+            std::unique_ptr<sql::Statement> p_statement(m_p_connection->createStatement());
 
-        p_statement->execute(
-            "DROP TABLE IF EXISTS " + TABLE_INVENTORY
-        );
-        std::cout << "Finished dropping table (if existed)\n";
+            // Drop tables if they exist
+            p_statement->execute("DROP TABLE IF EXISTS " + TABLE_DEDUCTIBLE);
+            p_statement->execute("DROP TABLE IF EXISTS " + TABLE_AGE);
+            p_statement->execute("DROP TABLE IF EXISTS " + TABLE_BONUS);
+            p_statement->execute("DROP TABLE IF EXISTS " + TABLE_INSURANCE);
+            std::cout << "Finished dropping table (if existed)\n";
 
-        p_statement->execute(
-            "CREATE TABLE " + TABLE_INVENTORY + " ("
-            "id INT PRIMARY KEY AUTO_INCREMENT, "
-            "name VARCHAR(50), "
-            "quantity INTEGER); "
-        );
-        std::cout << "Finished creating table\n";
+            p_statement->execute(
+                "CREATE TABLE " + TABLE_INSURANCE + " ("
+                "id INT PRIMARY KEY AUTO_INCREMENT, "
+                "name VARCHAR(50) "
+                ");"
+            );
+
+            p_statement->execute(
+                "CREATE TABLE " + TABLE_BONUS + " ("
+                "id INT PRIMARY KEY AUTO_INCREMENT, "
+                "name VARCHAR(50) "
+                ");"
+            );
+
+            p_statement->execute(
+                "CREATE TABLE " + TABLE_AGE + " ("
+                "id INT PRIMARY KEY AUTO_INCREMENT, "
+                "name VARCHAR(50), "
+                "start SMALLINT, "
+                "end SMALLINT "
+                ");"
+            );
+
+            p_statement->execute(
+                "CREATE TABLE " + TABLE_DEDUCTIBLE + " ("
+                "id INT PRIMARY KEY AUTO_INCREMENT, "
+                "fk_insurance INT, "
+                "fk_bonus INT, "
+                "fk_age INT, "
+                "deductible_300 DECIMAL(4,2), "
+                "deductible_500 DECIMAL(4,2), "
+                "deductible_1000 DECIMAL(4,2), "
+                "deductible_1500 DECIMAL(4,2), "
+                "deductible_2000 DECIMAL(4,2), "
+                "deductible_2500 DECIMAL(4,2), "
+                "region BIT, "
+                "accident BOOL, "
+                "FOREIGN KEY (fk_insurance) REFERENCES " + TABLE_INSURANCE + "(id), "
+                "FOREIGN KEY (fk_bonus) REFERENCES " + TABLE_BONUS + "(id), "
+                "FOREIGN KEY (fk_age) REFERENCES " + TABLE_AGE + "(id)"
+                ");"
+            );
+            std::cout << "Finished creating table\n";
+
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
     }
 
 
@@ -82,7 +133,7 @@ namespace db {
 
         std::unique_ptr<sql::PreparedStatement> p_prep_statement(
             m_p_connection->prepareStatement(
-                "INSERT INTO " + TABLE_INVENTORY + 
+                "INSERT INTO " + TABLE_INSURANCE + 
                 "(name, quantity) "
                 "VALUES(?, ?) ")
         );
@@ -144,7 +195,7 @@ namespace db {
 
         std::unique_ptr<sql::PreparedStatement> p_prep_statement(
             m_p_connection->prepareStatement(
-                "UPDATE " + TABLE_INVENTORY + 
+                "UPDATE " + TABLE_INSURANCE + 
                 " SET quantity = ? WHERE name = ?")
         );
 
@@ -164,7 +215,7 @@ namespace db {
 
         std::unique_ptr<sql::PreparedStatement> p_prep_statement(
             m_p_connection->prepareStatement(
-                "DELETE FROM " + TABLE_INVENTORY + 
+                "DELETE FROM " + TABLE_INSURANCE + 
                 " WHERE name = ?")
         );
 

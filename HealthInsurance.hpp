@@ -52,6 +52,8 @@ namespace bll {
 		std::string m_state{ "n/a" };
 		std::string m_year{ "2024" };
 		const float m_MAX_SHARE{ 700.0f };
+		const float m_MAX_SHARE_KID{ 350.0f };
+		const float m_QUOTA{ 0.1f }; // quote-part 10%
 
 		// --- option age ---
 		// age >= 25 years 
