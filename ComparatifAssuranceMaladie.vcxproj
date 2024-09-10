@@ -131,13 +131,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleView.cpp" />
+    <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DbConnection.cpp" />
     <ClCompile Include="HealthInsurance.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Config.hpp" />
     <ClInclude Include="ConsoleView.hpp" />
+    <ClInclude Include="Controller.hpp" />
     <ClInclude Include="DbConnection.hpp" />
     <ClInclude Include="HealthInsurance.hpp" />
     <ClInclude Include="FileManagement.hpp" />

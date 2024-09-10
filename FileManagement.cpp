@@ -1,48 +1,42 @@
 #include "FileManagement.hpp"
+#include "Config.hpp"
 
 
 namespace ext {
 
-
-
-    void FileManagement::readFileInCmdLine(int argc, char* argv[]) {
+    // Reader
+    std::vector<CsvLine> CsvRead::csvReader(std::string file_path, int argc, char* argv[]) {
         // Program arguments (when launching with console)
         std::cout << "argc: " << argc << "\n";
 
-        if (argc < 2) {
-            std::cout << "Missing file name as argument\n";
-            return;
+        if (argc >= 2) {
+            std::cout << "File is read from argument\n";
+            return readFile(argv[1]);
         }
 
-        for (int i = 0; i < argc; i++) {
-            std::cout << "\t" << argv[i] << "\n";
+        if (file_path.empty()) {
+            std::cout << "File is read from user entry\n";
+            return readFileFromUserEntry();
         }
-
-        // File object
-        std::ifstream input_file;
-        input_file.open(argv[1]);
-
-        // Check if the file opened successfully
-        if (!input_file.is_open()) {
-            std::cerr << "Error: Could not open the file " << argv[1] << "\n";
-            return;
+        
+#if DEBUG
+        if (!file_path.empty()) {
+            std::cout << "File is read from code line\n";
+            return readFile(file_path);
         }
+#endif // DEBUG
 
-        // Read data
-        std::string line;
-        std::cout << "File Content: \n";
-        while (getline(input_file, line)) {
-            std::cout << line << "\n"; // Print the current line 
+        else {
+            std::cout << "Error: Impossible to open a file \n";
         }
-
-        std::system("pause");
-        input_file.close();
     }
 
 
 
-    void FileManagement::getFileFromUser() {
-        std::string filename{ "" };
+    // Read the file if is given as full path by the user
+    std::vector<CsvLine> CsvRead::readFileFromUserEntry() {
+
+        std::string file_path{ "" };
         std::ifstream input_file{ "" };
 
         while (!input_file.is_open()) {
@@ -50,26 +44,116 @@ namespace ext {
             // Prompt the user to enter the file name
             std::cout << "File path should look like that: C:/Users/YourSession/Folder/Your_file.csv\n";
             std::cout << "Enter the full path of the file: ";
-            std::cin >> filename;
-
-            input_file.open(filename);
-
-            // Check if the file opened successfully
-            if (!input_file.is_open()) {
-                std::cerr << "Error: Could not open the file " << filename << "\n";
-            }
+            std::cin >> file_path;
+            input_file.open(file_path.c_str());
         }
-
-        std::cout << "File opened successfully.\n";
-
-        // Read and print each line
-        std::string line;
-        while (std::getline(input_file, line)) {
-            std::cout << line << "\n";
-        }
-
-        std::system("pause");
         input_file.close();
+        return readFile(file_path);
     }
 
-} // namespace rf
+
+    // Read a file
+    std::vector<CsvLine> CsvRead::readFile(std::string file_path) {
+        std::ifstream input_file{ "" };
+
+        input_file.open(file_path.c_str());
+
+        // Check if the file opened successfully
+        if (!input_file.is_open()) {
+            std::cerr << "Error: Could not open the file " << file_path << "\n";
+        }
+        
+        std::cout << "File opened successfully.\n";
+
+        std::string line{ "" };
+        std::vector<CsvLine> lines; // Vector holding line
+
+        // Read each line and push it in a vector
+        while (std::getline(input_file, line)) {
+            CsvLine csv_line;
+            csv_line.parse(line);
+            lines.push_back(csv_line);
+        }
+
+        input_file.close();
+        return lines;
+    }
+
+
+    // Parse each line with a delimiter (default is ",") and add them to m_values
+    void CsvLine::parse(std::string line, char delimiter) {
+
+        std::stringstream in_line(line);
+        std::string temp_column = "";
+
+        while (std::getline(in_line, temp_column, delimiter)) {
+            m_values.push_back(temp_column);
+        }
+    }
+
+
+    // Return a string stock in m_values
+    std::string CsvLine::getString(int column) {
+
+        return m_values[column];
+    }
+
+
+    // Return a double stock in m_values
+    double CsvLine::getDouble(int column) {
+
+        return atof(m_values[column].c_str());
+    }
+
+
+    // Return a int stock in m_values
+    int CsvLine::getInt(int column) {
+
+        return atof(m_values[column].c_str());
+    }
+
+
+    void CsvWrite::createHeathInsurance(std::vector<CsvLine> lines) {
+
+        for (CsvLine line : lines) {
+            size_t i = 0;
+
+            while (i < 6) {
+                // Insert in deductible (0/300 to 600/2500) WITH accident risk
+
+                i++;
+            }
+            // Insert in insurance (name)
+
+            i++;
+
+            while (i < 13) {
+                // Insert in deductible (0/300 to 600/2500) WITHOUT accident risk
+                
+                i++;
+            }
+        }
+    }
+
+
+    // For debug only
+    void CsvWrite::showParsing(std::vector<CsvLine> lines) {
+
+        for (CsvLine line : lines) {
+            size_t i = 0;
+            while (i < 6) {
+                std::cout << line.getDouble(i) << "\n";
+                i++;
+            }
+            std::cout << line.getString(i) << "\n";
+            i++;
+
+            while (i < 13) {
+                std::cout << line.getDouble(i) << "\n";
+                i++;
+            }
+            std::cout << "=====================================================\n";
+        }
+    }
+
+} // namespace ext

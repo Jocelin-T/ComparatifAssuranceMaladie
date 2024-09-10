@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <stdlib.h>
 
+#include "Controller.hpp"
+#include "Config.hpp"
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
 
@@ -43,37 +45,24 @@
 
 int main(int argc, char* argv[]){
 
-    //// Color of the console 
-    //HANDLE console_color;
-    //console_color = GetStdHandle(
-    //    STD_OUTPUT_HANDLE);
+#if DEBUG
+    std::cout << "DEBUG mode true\n";
+    //std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
+    std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // Simple CSV
+#else 
+    std::cout << "DEBUG mode false\n";
+    std::string path{ "" };
+#endif // DEBUG
 
-    //// Print different colors from 1 
-    //// to 50 on the output screen 
-    //for (int P = 0; P < 100; P++) {
+    ctrl::createNewDatabase();
 
-    //    // P is color code of the 
-    //    // corresponding color 
-    //    SetConsoleTextAttribute(console_color, P);
+    ext::CsvRead file;
+    ext::CsvWrite insert_DB;
+    insert_DB.showParsing(file.csvReader(path, argc, argv));
+    insert_DB.createHeathInsurance(file.csvReader(path, argc, argv));
 
-	   // std::cout << P << " Hello World\n";
-    //}
+    ctrl::displayDatabase();
 
-    db::SqlConnection con;
-    con.CreateTables();
-    //con.InsertData();
-    //con.ReadAllData("inventory");
-    //con.UpdateData();
-    //con.ReadAllData("inventory");
-    //con.DeleteData();
-    //con.ReadAllData("inventory");
-
-    // Test to read external file (file at same place as .exe)
-    ext::FileManagement file;
-    file.readFileInCmdLine(argc, argv);
-
-    // C:\Users\ThJo\source\repos\ComparatifAssuranceMaladie\x64\Release\textfile.txt
-    file.getFileFromUser();
     
 	return 0;
 }
