@@ -21,14 +21,16 @@
 #include <cppconn/metadata.h>
 #include <cppconn/resultset_metadata.h>
 
+#include "Typedef.hpp"
+
 
 namespace db {
 
-	struct TblDeductible {
-		int m_id{ 0 };
-		int m_fk_insurance{ 0 };
-		int m_fk_bonus{ 0 };
-		int m_fk_age{ 0 };
+	struct TableDeductible {
+		uint16_t m_id{ 0 };
+		uint16_t m_fk_insurance{ 0 };
+		uint16_t m_fk_bonus{ 0 };
+		uint16_t m_fk_age{ 0 };
 		std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
 		float m_deductible_1{ 0.0f };
@@ -37,39 +39,38 @@ namespace db {
 		float m_deductible_4{ 0.0f };
 		float m_deductible_5{ 0.0f };
 		float m_deductible_6{ 0.0f };
-		unsigned short int m_age{ 0 };
-		unsigned short int m_region{ 0 };
+		uint16_t m_region{ 0 };
 		bool m_accidents_risk{ false };
 	};
 	
 	class SqlConnection{
 	
 	public:
-		SqlConnection();
+		SqlConnection(void);
 
-		void dropAllTables();
-		void createAllTables();
+		void dropAllTables(void);
+		void createAllTables(void);
 
-		void saveInTableInsurance(const std::string& ins_name);
-		void saveInTableBonus(const std::string& bonus_name);
-		void saveInTableDeductible(const TblDeductible& tbl);
+		void saveInTableInsurances(const std::string& insurance_name);
+		void saveInTableBonuses(const std::string& bonus_name);
+		void saveInTableDeductibles(const TableDeductible& table);
 
 		// To check if entry is aleready in DB
-		int getInsuranceId(/*TODO*/);
-		int getBonusId(/*TODO*/);
-		int getAgeId(/*TODO*/);
+		uint16_t findInsuranceIDByName(const std::string& insurance_name);
+		uint16_t findBonusIDByName(const std::string& bonus_name);
+		uint16_t findAgeIDByName(const std::string& age_name);
 
 
-		void displayAllTableData();
-		void displayAllData(const std::string& table_name);
+		void displayAllTableData(void);
+		void displayAllDataFromOneTable(const std::string& table_name);
 
-		// Not used for now
-		void updateData();
-		void deleteData();
+		void updateData(void); // Not used for now
+		void deleteData(void); // Not used for now
 
 	private:
-		void connectToSqlDatabase();
-		bool isConnectionOpen() const;
+		uint16_t findIDInTableByName(const std::string& table_name, const std::string& name);
+		void connectToSqlDatabase(void);
+		bool isConnectionOpen(void) const;
 
 		sql::Driver* m_p_driver; // raw ptr returned by the C++ Connector lib
 		std::unique_ptr<sql::Connection> m_p_connection;

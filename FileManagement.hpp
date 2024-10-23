@@ -9,7 +9,8 @@
 #include <sstream>
 #include <vector>
 
-#include "Controller.hpp"
+#include "Typedef.hpp"
+
 
 namespace ext {
 
@@ -18,17 +19,16 @@ namespace ext {
     class CsvLine;
     class CsvWrite;
 
-
     // Manage a File to read
     class CsvRead {
 
     public:
 
         // Constructor
-        CsvRead() {}
+        CsvRead(void) {}
 
         // Destructor
-        ~CsvRead() {}
+        ~CsvRead(void) {}
 
 
         /** 
@@ -37,12 +37,16 @@ namespace ext {
          *  can pass the file path when asked OR
          *  can pass the file path in code.
          * 
-         * @param file_path => file path of the csv to read (default "")
-         * @param argc      => argument count 
-         * @param argv      => argument value
+         * @param file_path => file path of the csv to read (default = "")
+         * @param argc      => argument count (default = NULL)
+         * @param argv      => argument value (default = nullptr)
          * @return 
          */
-        std::vector<CsvLine> csvReader(std::string file_path = "", int argc = NULL, char* argv[] = nullptr);
+        std::vector<CsvLine> csvReader(
+            const std::string& file_path = "",
+            int argc = NULL,
+            char* argv[] = nullptr
+        );
 
     private:
 
@@ -52,18 +56,19 @@ namespace ext {
          * @return std::vector<CsvLine>
          * 
          */
-        std::vector<CsvLine> readFileFromUserEntry();
+        std::vector<CsvLine> readFileFromUserEntry(void);
 
 
         /** 
          * @brief : Read and parse a file.
          * 
-         * @param file_path     => file path of the csv to read (default "")
+         * @param file_path     => file path of the csv to read (default = "")
          * 
          * @return std::vector<CsvLine>
          */
-        std::vector<CsvLine> readFile(std::string file_path = "");
+        std::vector<CsvLine> readFile(const std::string& file_path = "");
     };
+
 
 
     // Manage the lines of a File
@@ -71,8 +76,8 @@ namespace ext {
 
     public:
 
-        // Costructor
-        CsvLine() {}
+        // Constructor
+        CsvLine(void) {}
 
         // Copy constructor
         CsvLine(const CsvLine& other) {
@@ -85,16 +90,16 @@ namespace ext {
         }
 
         // Destructor
-        ~CsvLine() {}
+        ~CsvLine(void) {}
 
 
         /** 
          * @brief : Parse a line.
          * 
          * @param line (std::string)    => line to parse
-         * @param delimiter (char)      => delimiter 
+         * @param delimiter (char)      => delimiter (default = ,)
          */
-        void parse(std::string line, char delimiter = ',');
+        void parse(const std::string& line, char delimiter = ',');
 
 
         /** 
@@ -104,32 +109,34 @@ namespace ext {
          * 
          * @return (std::string)
          */
-        std::string getString(int column);
+        std::string getString(uint16_t column);
 
 
         /** 
          * @brief : Return the value at the given column.
          * 
-         * @param column (int)  => which position is the value to return
+         * @param column (uint16_t)  => which position is the value to return
          * 
          * @return (double)
          */
-        double getDouble(int column);
+        double getDouble(uint16_t column);
 
 
         /**
          * @brief : Return the value at the given column.
          *
-         * @param column (int)  => which position is the value to return
+         * @param column (uint16_t)  => which position is the value to return
          *
-         * @return (int)
+         * @return (uint16_t)
          */
-        int getInt(int column);
+        uint16_t getInt(uint16_t column);
 
     private:
 
         std::vector<std::string> m_values;
     };
+
+
 
     // Manage the parsed line 
     class CsvWrite {
@@ -137,20 +144,13 @@ namespace ext {
     public:
 
         // Constructor
-        CsvWrite() {}
+        CsvWrite(void) {}
 
         // Destructor
-        ~CsvWrite(){}
-
-        /** 
-         * @brief : Insert in a Database the given Vector.
-         * 
-         * @param lines (std::vector<CsvLine>)  => vector holding lines
-         */
-        void createHeathInsurance(std::vector<CsvLine> lines);
+        ~CsvWrite(void){}
 
         // For debug only
-        void showParsing(std::vector<CsvLine> lines);
+        void showParsing(const std::vector<CsvLine>& lines);
     };
 
 } // namespace ext

@@ -6,6 +6,7 @@
 #include "Config.hpp"
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
+#include "HealthInsurance.hpp"
 
 // Compart la primes des assurances maladie
 // 
@@ -42,8 +43,10 @@
 // Votre participation maximale aux frais s’élève donc au montant de votre franchise, 
 //	auquel s’ajoutent 700 francs de quote-part.
 
+using namespace ctrl;
 
 int main(int argc, char* argv[]){
+
 
 #if DEBUG
     std::cout << "DEBUG mode true\n";
@@ -54,14 +57,17 @@ int main(int argc, char* argv[]){
     std::string path{ "" };
 #endif // DEBUG
 
-    ctrl::createNewDatabase();
+    createNewDatabase();
 
-    ext::CsvRead file;
-    ext::CsvWrite insert_DB;
-    insert_DB.showParsing(file.csvReader(path, argc, argv));
-    insert_DB.createHeathInsurance(file.csvReader(path, argc, argv));
+    createHealthInsurancesFromCSV(path, argc, argv);
+    createHealthInsurancesFromCSV(path, argc, argv);
 
-    ctrl::displayDatabase();
+    displayDatabase();
+
+
+    //HealthInsurance health_insurance;
+    //saveHealthInsuranceInDatabase(health_insurance);
+    //displayDatabase();
 
     
 	return 0;

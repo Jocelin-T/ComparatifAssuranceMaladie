@@ -6,37 +6,58 @@
  * @date   10 September 2024
  *********************************************************************/
 #pragma once
-#include <vector>
+#include <fstream>
 #include <string>
-#include <iostream>
-#include <memory>
+#include <sstream>
+#include <vector>
 
-#include "Config.hpp"
-#include "HealthInsurance.hpp"
-#include "DbConnection.hpp"
+#include "Typedef.hpp"
 
- // namespace used
-using logic::HealthInsurance;
-using logic::Deductible;
-using db::SqlConnection;
-using db::TblDeductible;
+// Forward declaration
+namespace logic {
+	class HealthInsurance;
+}
+
+namespace db {
+	class SqlConnection;
+}
+
+namespace ext {
+	class CsvLine;
+}
 
 namespace ctrl {
-
+	using logic::HealthInsurance;
+	using db::SqlConnection;
+	using ext::CsvLine;
 
 	/**
 	 * Drop all Tables and create new Tables
 	 */
-	void createNewDatabase();
+	void createNewDatabase(void);
 
 	/**
 	 * Display all Tables
 	 */
-	void displayDatabase();
+	void displayDatabase(void);
 
 
-	void saveHealthInsurance(const HealthInsurance& insurance);
+	void createHealthInsurancesFromCSV(const std::string& file_path, int argc, char* argv[]);
+
+
+	uint16_t saveHealthInsuranceInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
+
+	// TODO: 
+	uint16_t saveBonusInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
+
+	// TODO: 
+	uint16_t saveAgeInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
 	
-
+	/**
+	* @brief : Insert in a Database the given Vector.
+	*
+	* @param lines (std::vector<CsvLine>)  => vector holding lines
+	*/
+	void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
 } // namespace ctrl

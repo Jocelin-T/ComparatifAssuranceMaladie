@@ -1,13 +1,12 @@
 #include "FileManagement.hpp"
 #include "Config.hpp"
 
-
 namespace ext {
 
     // Reader
-    std::vector<CsvLine> CsvRead::csvReader(std::string file_path, int argc, char* argv[]) {
+    std::vector<CsvLine> CsvRead::csvReader(const std::string& file_path, int argc, char* argv[]) {
         // Program arguments (when launching with console)
-        std::cout << "argc: " << argc << "\n";
+        std::cout << "Arguments Count (argc): " << argc << "\n";
 
         if (argc >= 2) {
             std::cout << "File is read from argument\n";
@@ -32,9 +31,8 @@ namespace ext {
     }
 
 
-
     // Read the file if is given as full path by the user
-    std::vector<CsvLine> CsvRead::readFileFromUserEntry() {
+    std::vector<CsvLine> CsvRead::readFileFromUserEntry(void) {
 
         std::string file_path{ "" };
         std::ifstream input_file{ "" };
@@ -53,9 +51,9 @@ namespace ext {
 
 
     // Read a file
-    std::vector<CsvLine> CsvRead::readFile(std::string file_path) {
-        std::ifstream input_file{ "" };
+    std::vector<CsvLine> CsvRead::readFile(const std::string& file_path) {
 
+        std::ifstream input_file{ "" };
         input_file.open(file_path.c_str());
 
         // Check if the file opened successfully
@@ -81,10 +79,10 @@ namespace ext {
 
 
     // Parse each line with a delimiter (default is ",") and add them to m_values
-    void CsvLine::parse(std::string line, char delimiter) {
+    void CsvLine::parse(const std::string& line, char delimiter) {
 
         std::stringstream in_line(line);
-        std::string temp_column = "";
+        std::string temp_column{ "" };
 
         while (std::getline(in_line, temp_column, delimiter)) {
             m_values.push_back(temp_column);
@@ -93,63 +91,40 @@ namespace ext {
 
 
     // Return a string stock in m_values
-    std::string CsvLine::getString(int column) {
-
+    std::string CsvLine::getString(uint16_t column) {
         return m_values[column];
     }
 
 
     // Return a double stock in m_values
-    double CsvLine::getDouble(int column) {
-
+    double CsvLine::getDouble(uint16_t column) {
         return atof(m_values[column].c_str());
     }
 
 
-    // Return a int stock in m_values
-    int CsvLine::getInt(int column) {
-
+    // Return a uint16_t stock in m_values
+    uint16_t CsvLine::getInt(uint16_t column) {
         return atof(m_values[column].c_str());
     }
 
 
-    void CsvWrite::createHeathInsurance(std::vector<CsvLine> lines) {
+    // For debug only, display all lines
+    void CsvWrite::showParsing(const std::vector<CsvLine>& lines) {
 
         for (CsvLine line : lines) {
-            size_t i = 0;
+
+            uint16_t i{ 0 };
 
             while (i < 6) {
-                // Insert in deductible (0/300 to 600/2500) WITH accident risk
-
+                std::cout << line.getDouble(i) << '\n';
                 i++;
             }
-            // Insert in insurance (name)
 
+            std::cout << line.getString(i) << '\n';
             i++;
 
             while (i < 13) {
-                // Insert in deductible (0/300 to 600/2500) WITHOUT accident risk
-                
-                i++;
-            }
-        }
-    }
-
-
-    // For debug only
-    void CsvWrite::showParsing(std::vector<CsvLine> lines) {
-
-        for (CsvLine line : lines) {
-            size_t i = 0;
-            while (i < 6) {
-                std::cout << line.getDouble(i) << "\n";
-                i++;
-            }
-            std::cout << line.getString(i) << "\n";
-            i++;
-
-            while (i < 13) {
-                std::cout << line.getDouble(i) << "\n";
+                std::cout << line.getDouble(i) << '\n';
                 i++;
             }
             std::cout << "=====================================================\n";
