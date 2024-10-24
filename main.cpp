@@ -66,12 +66,6 @@ int main(int argc, char* argv[]){
     //createHealthInsurancesFromCSV(path, argc, argv);
 
     displayDatabase();
-
-
-    //HealthInsurance health_insurance;
-    //saveHealthInsuranceInDatabase(health_insurance);
-    //displayDatabase();
-
     
 	return 0;
 }

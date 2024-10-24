@@ -323,14 +323,14 @@ namespace db {
             // Loop true the column and their names
             std::cout << "\nData in table " << table_name << ":\n";
             for (uint16_t i{ 1 }; i <= nbr_columns; i++) {
-                std::cout << std::setw(10) << std::left << p_result_set_meta->getColumnName(i);
+                std::cout << std::setw(12) << std::left << p_result_set_meta->getColumnName(i) << '|';
             }
             std::cout << "\n---------------------------------------------------\n";
 
             // Loop true the rows and display the data
             while (p_result_set->next()) {
                 for (uint16_t i{ 1 }; i <= nbr_columns; i++) {
-                    std::cout << std::setw(10) << std::left << p_result_set->getString(i);
+                    std::cout << std::setw(12) << std::left << p_result_set->getString(i) << '|';
                 }
                 std::cout << '\n';
             }

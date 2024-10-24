@@ -4,6 +4,7 @@
 #include "Config.hpp"
 #include "Globals.hpp"
 #include "HealthInsurance.hpp"
+#include "Deductible.hpp"
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
 
@@ -46,7 +47,7 @@ namespace ctrl {
         // Insert health insurance, bonus, age and deductible data in database
         SqlConnection connect;
         for (const HealthInsurance& insurance : list_insurances) {
-            saveDeductibleInDatabase(connect, insurance,
+            insertDeductibleInDatabase(connect, insurance,
                 saveHealthInsuranceInDatabase(connect, insurance),
                 saveBonusInDatabase(connect, insurance),
                 saveAgeInDatabase(connect, insurance)
@@ -122,8 +123,8 @@ namespace ctrl {
 		return age_category_id;
     }
 
-    // TODO
-    void saveDeductibleInDatabase(
+
+    void insertDeductibleInDatabase(
         SqlConnection& connection,
         const HealthInsurance& insurance,
         const uint16_t fk_insurance,
@@ -152,13 +153,12 @@ namespace ctrl {
             deductible_to_insert.m_deductible_4 = deductible.getDeductibleValue(3);
             deductible_to_insert.m_deductible_5 = deductible.getDeductibleValue(4);
             deductible_to_insert.m_deductible_6 = deductible.getDeductibleValue(5);
-        }
 
-        connection.saveInTableDeductibles(deductible_to_insert);
+            connection.saveInTableDeductibles(deductible_to_insert);
+        }
     }
 
 
-    // TODO: Use a parsed CSV file to create a HealthInsurance Object.
     void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances) {
 
         for (CsvLine line : lines) {

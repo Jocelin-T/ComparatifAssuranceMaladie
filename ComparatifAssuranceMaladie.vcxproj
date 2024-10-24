@@ -136,6 +136,7 @@
     <ClCompile Include="ConsoleView.cpp" />
     <ClCompile Include="Controller.cpp" />
     <ClCompile Include="DbConnection.cpp" />
+    <ClCompile Include="Deductible.cpp" />
     <ClCompile Include="HealthInsurance.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileManagement.cpp" />
@@ -146,6 +147,7 @@
     <ClInclude Include="ConsoleView.hpp" />
     <ClInclude Include="Controller.hpp" />
     <ClInclude Include="DbConnection.hpp" />
+    <ClInclude Include="Deductible.hpp" />
     <ClInclude Include="Globals.hpp" />
     <ClInclude Include="HealthInsurance.hpp" />
     <ClInclude Include="FileManagement.hpp" />
