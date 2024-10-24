@@ -146,6 +146,7 @@
     <ClInclude Include="ConsoleView.hpp" />
     <ClInclude Include="Controller.hpp" />
     <ClInclude Include="DbConnection.hpp" />
+    <ClInclude Include="Globals.hpp" />
     <ClInclude Include="HealthInsurance.hpp" />
     <ClInclude Include="FileManagement.hpp" />
     <ClInclude Include="Typedef.hpp" />

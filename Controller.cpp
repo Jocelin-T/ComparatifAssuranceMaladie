@@ -2,6 +2,7 @@
 
 #include "Controller.hpp"
 #include "Config.hpp"
+#include "Globals.hpp"
 #include "HealthInsurance.hpp"
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
@@ -42,15 +43,15 @@ namespace ctrl {
         createNewHealthInsurance(raw_file.csvReader(file_path, argc, argv), list_insurances);
 
 
+        // Insert health insurance, bonus, age and deductible data in database
         SqlConnection connect;
-
         for (const HealthInsurance& insurance : list_insurances) {
-
-            saveHealthInsuranceInDatabase(connect, insurance);
-            saveBonusInDatabase(connect, insurance);
-            saveAgeInDatabase(connect, insurance);
+            saveDeductibleInDatabase(connect, insurance,
+                saveHealthInsuranceInDatabase(connect, insurance),
+                saveBonusInDatabase(connect, insurance),
+                saveAgeInDatabase(connect, insurance)
+            );
         }
-
     }
 
 
@@ -70,7 +71,6 @@ namespace ctrl {
     }
 
 
-    // BUG does not work
     uint16_t saveBonusInDatabase(SqlConnection& connection, const HealthInsurance& insurance) {
 
         uint16_t bonus_id{ 0 };
@@ -94,9 +94,67 @@ namespace ctrl {
     
     uint16_t saveAgeInDatabase(SqlConnection& connection, const HealthInsurance& insurance) {
 
-        uint16_t age_category_id = connection.findInsuranceIDByName(insurance.getInsuranceName());
+        uint16_t age_category_id{ 0 };
 
+        for (const Deductible& deductible : insurance.m_deductibles) {
+
+            std::string age_category_name{ deductible.getDeductibleAgeCategory() };
+            age_category_id = connection.findAgeIDByName(age_category_name);
+
+            if (age_category_id > 0) {
+                std::cout << "Age category " << age_category_name << " found at ID: " << age_category_id << '\n';
+            }
+            else {
+                uint16_t start{ 999 };
+                uint16_t end{ 999 };
+
+                std::cout << "When is starting the age category " << age_category_name << " : ";
+				std::cin >> start;
+
+                std::cout << "When is ending the age category " << age_category_name << " : ";
+                std::cin >> end;
+                std::cout << '\n';
+
+                connection.saveInTableAge(age_category_name, start, end);
+                age_category_id = connection.findAgeIDByName(age_category_name);
+            }
+        }
 		return age_category_id;
+    }
+
+    // TODO
+    void saveDeductibleInDatabase(
+        SqlConnection& connection,
+        const HealthInsurance& insurance,
+        const uint16_t fk_insurance,
+        const uint16_t fk_bonus,
+        const uint16_t fk_age
+    ) {
+
+        TableDeductible deductible_to_insert;
+
+        deductible_to_insert.m_fk_insurance = fk_insurance;
+        deductible_to_insert.m_fk_bonus = fk_bonus;
+        deductible_to_insert.m_fk_age = fk_age;
+
+        for (const Deductible& deductible : insurance.m_deductibles) {
+
+#if DEBUG
+            deductible.displayDeductible();
+#endif // DEBUG
+
+            deductible_to_insert.m_accidents_risk = deductible.getDeductibleAccidentRisk();
+            deductible_to_insert.m_model_name = deductible.getDeductibleModelName();
+            deductible_to_insert.m_region = deductible.getDeductibleRegion();
+            deductible_to_insert.m_deductible_1 = deductible.getDeductibleValue(0);
+            deductible_to_insert.m_deductible_2 = deductible.getDeductibleValue(1);
+            deductible_to_insert.m_deductible_3 = deductible.getDeductibleValue(2);
+            deductible_to_insert.m_deductible_4 = deductible.getDeductibleValue(3);
+            deductible_to_insert.m_deductible_5 = deductible.getDeductibleValue(4);
+            deductible_to_insert.m_deductible_6 = deductible.getDeductibleValue(5);
+        }
+
+        connection.saveInTableDeductibles(deductible_to_insert);
     }
 
 

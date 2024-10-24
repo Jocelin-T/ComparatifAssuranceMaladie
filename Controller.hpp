@@ -44,17 +44,22 @@ namespace ctrl {
 
 	void createHealthInsurancesFromCSV(const std::string& file_path, int argc, char* argv[]);
 
-
 	uint16_t saveHealthInsuranceInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
 
-	// TODO: 
 	uint16_t saveBonusInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
 
-	// TODO: 
 	uint16_t saveAgeInDatabase(SqlConnection& connection, const HealthInsurance& insurance);
+
+	void saveDeductibleInDatabase(
+		SqlConnection& connection,
+		const HealthInsurance& insurance,
+		const uint16_t fk_insurance,
+		const uint16_t fk_bonus, 
+		const uint16_t fk_age
+	);
 	
 	/**
-	* @brief : Insert in a Database the given Vector.
+	* @brief :
 	*
 	* @param lines (std::vector<CsvLine>)  => vector holding lines
 	*/

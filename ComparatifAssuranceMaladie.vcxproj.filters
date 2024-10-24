@@ -62,5 +62,8 @@
     <ClInclude Include="Typedef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Globals.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

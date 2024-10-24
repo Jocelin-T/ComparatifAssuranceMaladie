@@ -22,6 +22,7 @@
 #include <cppconn/resultset_metadata.h>
 
 #include "Typedef.hpp"
+#include "Globals.hpp"
 
 
 namespace db {
@@ -53,12 +54,14 @@ namespace db {
 
 		void saveInTableInsurances(const std::string& insurance_name);
 		void saveInTableBonuses(const std::string& bonus_name);
-		void saveInTableDeductibles(const TableDeductible& table);
+		void saveInTableAge(const std::string& age_category_name, const uint16_t start_age, const uint16_t end_age);
+		void saveInTableDeductibles(const TableDeductible& deductible);
+
 
 		// To check if entry is aleready in DB
-		uint16_t findInsuranceIDByName(const std::string& insurance_name);
-		uint16_t findBonusIDByName(const std::string& bonus_name);
-		uint16_t findAgeIDByName(const std::string& age_name);
+		uint16_t findInsuranceIDByName(const std::string& insurance_name) const;
+		uint16_t findBonusIDByName(const std::string& bonus_name) const;
+		uint16_t findAgeIDByName(const std::string& age_name) const;
 
 
 		void displayAllTableData(void);
@@ -68,7 +71,7 @@ namespace db {
 		void deleteData(void); // Not used for now
 
 	private:
-		uint16_t findIDInTableByName(const std::string& table_name, const std::string& name);
+		uint16_t findIDInTableByName(const std::string& table_name, const std::string& name) const;
 		void connectToSqlDatabase(void);
 		bool isConnectionOpen(void) const;
 

@@ -108,12 +108,12 @@ namespace db {
                     "fk_bonus INT NOT NULL, "
                     "fk_age INT NOT NULL, "
                     "model_name VARCHAR(50) NULL, "
-                    "deduc_1 DECIMAL(4,2) NULL, "
-                    "deduc_2 DECIMAL(4,2) NULL, "
-                    "deduc_3 DECIMAL(4,2) NULL, "
-                    "deduc_4 DECIMAL(4,2) NULL, "
-                    "deduc_5 DECIMAL(4,2) NULL, "
-                    "deduc_6 DECIMAL(4,2) NULL, "
+                    "deduc_1 DECIMAL(6,2) NOT NULL, "
+                    "deduc_2 DECIMAL(6,2) NOT NULL, "
+                    "deduc_3 DECIMAL(6,2) NOT NULL, "
+                    "deduc_4 DECIMAL(6,2) NOT NULL, "
+                    "deduc_5 DECIMAL(6,2) NOT NULL, "
+                    "deduc_6 DECIMAL(6,2) NOT NULL, "
                     "region INT NOT NULL, "
                     "accident BOOL NOT NULL, "
                     "FOREIGN KEY (fk_insurance) REFERENCES " + m_TABLE_INSURANCES + " (id), "
@@ -146,7 +146,8 @@ namespace db {
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_INSURANCES +
                     "(name) "
-                    "VALUES(?) ")
+                    "VALUES(?) "
+                )
             );
 
             p_prep_statement->setString(1, insurance_name);
@@ -163,6 +164,7 @@ namespace db {
 
     // Insert in Table Bonus
     void SqlConnection::saveInTableBonuses(const std::string& bonus_name) {
+
         if (!isConnectionOpen()) {
             return;
         }
@@ -172,7 +174,8 @@ namespace db {
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_BONUSES +
                     "(name) "
-                    "VALUES(?) ")
+                    "VALUES(?) "
+                )
             );
 
             p_prep_statement->setString(1, bonus_name);
@@ -187,8 +190,41 @@ namespace db {
     }
 
 
+    void SqlConnection::saveInTableAge(const std::string& age_category_name, const uint16_t start_age, const uint16_t end_age) {
+
+        if (!isConnectionOpen()) {
+            return;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "INSERT INTO " + m_TABLE_AGES +
+                    "("
+                    "name, "
+                    "start, "
+                    "end "
+                    ") "
+
+                    "VALUES(?,?,?) ")
+            );
+
+            p_prep_statement->setString(1, age_category_name);
+            p_prep_statement->setInt(2, start_age);
+            p_prep_statement->setInt(3, end_age);
+
+            p_prep_statement->execute();
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
     // Insert in Table Deductible
-    void SqlConnection::saveInTableDeductibles(const TableDeductible& table) {
+    void SqlConnection::saveInTableDeductibles(const TableDeductible& deductible) {
 
         if (!isConnectionOpen()) {
             return;
@@ -216,18 +252,18 @@ namespace db {
                     "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ")
             );
 
-            p_prep_statement->setInt(1, table.m_fk_insurance);
-            p_prep_statement->setInt(2, table.m_fk_bonus);
-            p_prep_statement->setInt(3, table.m_fk_age);
-            p_prep_statement->setString(4, table.m_model_name);
-            p_prep_statement->setDouble(5, table.m_deductible_1);
-            p_prep_statement->setDouble(6, table.m_deductible_2);
-            p_prep_statement->setDouble(7, table.m_deductible_3);
-            p_prep_statement->setDouble(8, table.m_deductible_4);
-            p_prep_statement->setDouble(9, table.m_deductible_5);
-            p_prep_statement->setDouble(10, table.m_deductible_6);
-            p_prep_statement->setInt(11, table.m_region);
-            p_prep_statement->setBoolean(12, table.m_accidents_risk);
+            p_prep_statement->setInt(1, deductible.m_fk_insurance);
+            p_prep_statement->setInt(2, deductible.m_fk_bonus);
+            p_prep_statement->setInt(3, deductible.m_fk_age);
+            p_prep_statement->setString(4, deductible.m_model_name);
+            p_prep_statement->setDouble(5, deductible.m_deductible_1);
+            p_prep_statement->setDouble(6, deductible.m_deductible_2);
+            p_prep_statement->setDouble(7, deductible.m_deductible_3);
+            p_prep_statement->setDouble(8, deductible.m_deductible_4);
+            p_prep_statement->setDouble(9, deductible.m_deductible_5);
+            p_prep_statement->setDouble(10, deductible.m_deductible_6);
+            p_prep_statement->setInt(11, deductible.m_region);
+            p_prep_statement->setBoolean(12, deductible.m_accidents_risk);
 
             p_prep_statement->execute();
         }
@@ -240,21 +276,21 @@ namespace db {
     }
 
     // Return the insurance ID with the insurance name passed has parameter, or 0 if not found
-    uint16_t SqlConnection::findInsuranceIDByName(const std::string& insurance_name) {
+    uint16_t SqlConnection::findInsuranceIDByName(const std::string& insurance_name) const {
 
         return findIDInTableByName(m_TABLE_INSURANCES, insurance_name);
     }
 
 
     // Return the bonus ID with the bonus name passed has parameter, or 0 if not found
-    uint16_t SqlConnection::findBonusIDByName(const std::string& bonus_name) {
+    uint16_t SqlConnection::findBonusIDByName(const std::string& bonus_name) const {
 
-        return findIDInTableByName(m_TABLE_AGES, bonus_name);
+        return findIDInTableByName(m_TABLE_BONUSES, bonus_name);
     }
 
 
     // Return the age ID with the age name passed has parameter, or 0 if not found
-    uint16_t SqlConnection::findAgeIDByName(const std::string& age_name) {
+    uint16_t SqlConnection::findAgeIDByName(const std::string& age_name) const {
 
         return findIDInTableByName(m_TABLE_AGES, age_name);
     }
@@ -285,19 +321,21 @@ namespace db {
             uint16_t nbr_columns = p_result_set_meta->getColumnCount();
 
             // Loop true the column and their names
-            std::cout << "Data in table " << table_name << ":\n";
+            std::cout << "\nData in table " << table_name << ":\n";
             for (uint16_t i{ 1 }; i <= nbr_columns; i++) {
-                std::cout << std::setw(15) << std::left << p_result_set_meta->getColumnName(i);
+                std::cout << std::setw(10) << std::left << p_result_set_meta->getColumnName(i);
             }
             std::cout << "\n---------------------------------------------------\n";
 
             // Loop true the rows and display the data
             while (p_result_set->next()) {
                 for (uint16_t i{ 1 }; i <= nbr_columns; i++) {
-                    std::cout << std::setw(25) << std::left << p_result_set->getString(i);
+                    std::cout << std::setw(10) << std::left << p_result_set->getString(i);
                 }
                 std::cout << '\n';
             }
+            std::cout << "\n===================================================\n";
+
         }
         catch (sql::SQLException& e) {
             std::cerr << "SQL Error: " << e.what() << std::endl;
@@ -364,7 +402,7 @@ namespace db {
 
 
     // Return an ID by searching the name inside the Table passed in parameters
-    uint16_t SqlConnection::findIDInTableByName(const std::string& table_name, const std::string& name) {
+    uint16_t SqlConnection::findIDInTableByName(const std::string& table_name, const std::string& name) const {
 
         if (!isConnectionOpen()) {
             return 0;

@@ -47,6 +47,9 @@ using namespace ctrl;
 
 int main(int argc, char* argv[]){
 
+    // Clear console
+    system("cls");
+
 
 #if DEBUG
     std::cout << "DEBUG mode true\n";
@@ -60,7 +63,7 @@ int main(int argc, char* argv[]){
     createNewDatabase();
 
     createHealthInsurancesFromCSV(path, argc, argv);
-    createHealthInsurancesFromCSV(path, argc, argv);
+    //createHealthInsurancesFromCSV(path, argc, argv);
 
     displayDatabase();
 

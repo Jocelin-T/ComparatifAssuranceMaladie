@@ -9,12 +9,12 @@ namespace logic{
 
     // =============================================== Deductibles ===============================================
 
-    void Deductible::displayDeductible(void) {
+    void Deductible::displayDeductible(void) const {
 		std::cout << "Bonus name: " << m_bonus_name << '\n';
 		std::cout << "Model name: " << m_model_name << '\n';
 		std::cout << "Age category: " << m_age_category << '\n';
-        for (uint16_t i{ 0 }; i < m_NBR_DEDUCTIBLE; i++) {
-		    std::cout << "Deductibles values: " << m_deductibles_values[i] << '\n';
+        for (uint16_t i{ 0 }; i < glb::NBR_VALUES_PER_DEDUCTIBLE; i++) {
+		    std::cout << "Deductibles values: " << m_deductible_values[i] << '\n';
         }
 		std::cout << "Region: " << m_region << '\n';
 		std::cout << "Accidents risk: " << (m_accidents_risk ? "Yes" : "No") << '\n';
@@ -38,7 +38,7 @@ namespace logic{
 
 
     void Deductible::setDeductibleValues(const uint16_t index, const float value) {
-        m_deductibles_values[index] = value;
+        m_deductible_values[index] = value;
     }
 
 
@@ -52,27 +52,27 @@ namespace logic{
     }
 
     std::string Deductible::getDeductibleBonusName(void) const {
-        return std::string();
+        return m_bonus_name;
     }
 
     std::string Deductible::getDeductibleModelName(void) const {
-        return std::string();
+        return m_model_name;
     }
 
     std::string Deductible::getDeductibleAgeCategory(void) const {
-        return std::string();
+        return m_age_category;
     }
 
     float Deductible::getDeductibleValue(const uint16_t index) const {
-        return 0.0f;
+        return m_deductible_values[index];
     }
 
     uint16_t Deductible::getDeductibleRegion(void) const {
-        return 0;
+        return m_region;
     }
 
     bool Deductible::getDeductibleAccidentRisk(void) const {
-        return false;
+        return m_accidents_risk;
     }
 
 

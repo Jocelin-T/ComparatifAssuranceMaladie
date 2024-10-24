@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "Typedef.hpp"
+#include "Globals.hpp"
 
 
 namespace logic {
@@ -20,7 +21,7 @@ namespace logic {
 	class Deductible {
 	public:
 
-		void displayDeductible(void);
+		void displayDeductible(void) const;
 
 		// Setter
 		void setDeductibleBonusName(const std::string& bonus_name);
@@ -42,8 +43,7 @@ namespace logic {
 		std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
 		std::string m_age_category{ "n/a" };
-		static const uint16_t m_NBR_DEDUCTIBLE{ 6 };
-		float m_deductibles_values[m_NBR_DEDUCTIBLE]{ 0.0f };
+		float m_deductible_values[glb::NBR_VALUES_PER_DEDUCTIBLE]{ 0.0f };
 		uint16_t m_region{ 0 };
 		bool m_accidents_risk{ false };
 	};
