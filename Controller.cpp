@@ -161,15 +161,37 @@ namespace ctrl {
 
     void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances) {
 
+        uint16_t region{ 0 };
+        std::string bonus_name{ "n/a" };
+
         for (CsvLine line : lines) {
+
             uint16_t column{ 0 };
-
             HealthInsurance insurance;
-			
-            // Insert in deductible (0/300 to 600/2500) WITH accident risk
             Deductible deductible_with_accidents;
-            deductible_with_accidents.setDeductibleAccidentRisk(true);
+            Deductible deductible_without_accidents;
 
+            if (line.getDouble(column) == NULL && line.getInt(column) == NULL && line.getString(column) == "") {
+                bonus_name = line.getString(5);
+            }
+			
+            if (line.getDouble(column) == 300 && line.getDouble(column + 1) == 500) {
+
+                // Take the last char of the column, then substract a char '0' who give the real number(1) in uint16_t
+                region = (uint16_t)(line.getString(6)[line.getString(6).size() - 2] - '0');
+#if DEBUG
+                std::cout << "Region: " << region << '\n';
+#endif // DEBUG
+
+                continue;
+            }
+
+
+
+            // Insert in deductible (0/300 to 600/2500) WITH accidents risk
+            deductible_with_accidents.setDeductibleAccidentRisk(true);
+            deductible_with_accidents.setDeductibleRegion(region);
+            deductible_with_accidents.setDeductibleBonusName(bonus_name);
             while (column < 6) {
                 deductible_with_accidents.setDeductibleValues(column, line.getDouble(column));
                 column++;
@@ -179,10 +201,10 @@ namespace ctrl {
             insurance.setInsuranceName(line.getString(column));
             column++;
 
-            // Insert in deductible (0/300 to 600/2500) WITHOUT accident risk
-            Deductible deductible_without_accidents;
+            // Insert in deductible (0/300 to 600/2500) WITHOUT accidents risk
             deductible_without_accidents.setDeductibleAccidentRisk(false);
-
+            deductible_without_accidents.setDeductibleRegion(region);
+            deductible_without_accidents.setDeductibleBonusName(bonus_name);
             while (column < 13) {
                 deductible_without_accidents.setDeductibleValues(column - 7, line.getDouble(column));
                 column++;
@@ -193,6 +215,24 @@ namespace ctrl {
 
             list_insurances.push_back(insurance);
         }
+    }
+
+
+    void parseHeaderContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances) {
+
+        uint16_t column{ 0 };
+
+
+    }
+
+
+    void parseMainContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances) {
+
+    }
+
+
+    void parceFooterContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances) {
+
     }
 
 } // namespace ctrl

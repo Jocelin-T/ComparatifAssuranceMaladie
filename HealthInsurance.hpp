@@ -25,8 +25,6 @@ namespace logic {
 
 		HealthInsurance(void);
 
-		std::vector<Deductible> m_deductibles;
-
 		// Push one deductible to the std::vector
 		void addDeductibleToInsurance(Deductible& deductible);
 
@@ -43,6 +41,8 @@ namespace logic {
 		float getInsuranceMaxShare(void) const;
 		float getInsuranceMaxShareKid(void) const;
 		float getInsuranceQuota(void) const;
+
+		std::vector<Deductible> m_deductibles;
 
 	private:
 

@@ -28,10 +28,10 @@
 // It ensures that all necessary fields are correctly populated and
 // handles any database constraints or requirements.
 //
-// @param my_string (std::string&)			=> The database connection object. (default = "example")
+// @param my_string (std::string&)				=> The database connection object. (default = "example")
 // @param insurance (const HealthInsurance&)	=> The health insurance object to be saved.
 //
-// @return (uint16_t)						=> The ID of the newly inserted health insurance record.
+// @return (uint16_t)							=> The ID of the newly inserted health insurance record.
 //uint16_t saveHealthInsuranceInDatabase(std::string& my_string = "example", const HealthInsurance& insurance);
 
 namespace glb{

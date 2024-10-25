@@ -159,4 +159,13 @@ namespace ctrl {
 	*/
 	void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
+
+	void parseHeaderContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
+
+
+	void parseMainContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
+
+
+	void parceFooterContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
+
 } // namespace ctrl
