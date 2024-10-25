@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
 #if DEBUG
     std::cout << "DEBUG mode true\n";
     //std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
-    std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // Simple CSV
+    std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // Test CSV
 #else 
     std::cout << "DEBUG mode false\n";
     std::string path{ "" };

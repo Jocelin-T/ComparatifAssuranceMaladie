@@ -37,6 +37,7 @@
 namespace glb{
 
 	inline const uint16_t NBR_VALUES_PER_DEDUCTIBLE{ 6 };
+	inline const uint16_t NBR_COLUMN_IN_CSV_FILE{ 13 };
 
 } // namespace glb
 
