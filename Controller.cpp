@@ -36,6 +36,7 @@ namespace ctrl {
         CsvRead raw_file;
         CsvWrite parsed_file;
         std::vector<HealthInsurance> list_insurances;
+        uint16_t line{ 0 };
 
 #if DEBUG
         //parsed_file.showParsing(raw_file.csvReader(file_path, argc, argv));
@@ -50,8 +51,11 @@ namespace ctrl {
             insertDeductibleInDatabase(connect, insurance,
                 saveHealthInsuranceInDatabase(connect, insurance),
                 saveBonusInDatabase(connect, insurance),
-                saveAgeInDatabase(connect, insurance)
+                saveAgeInDatabase(connect, insurance),
+                line
             );
+
+            line++;
         }
     }
 
@@ -129,7 +133,8 @@ namespace ctrl {
         const HealthInsurance& insurance,
         const uint16_t fk_insurance,
         const uint16_t fk_bonus,
-        const uint16_t fk_age
+        const uint16_t fk_age,
+        uint16_t line
     ) {
 
         TableDeductible deductible_to_insert;
@@ -141,7 +146,8 @@ namespace ctrl {
         for (const Deductible& deductible : insurance.m_deductibles) {
 
 #if DEBUG
-            deductible.displayDeductible();
+
+            deductible.displayDeductible(line);
 #endif // DEBUG
 
             deductible_to_insert.m_accidents_risk = deductible.getDeductibleAccidentRisk();
@@ -167,68 +173,81 @@ namespace ctrl {
         std::string insurance_year{ "n/a" };
         std::string insurance_state{ "n/a" };
 
-        bool header_ignored{ false };
-        uint16_t ignored_phase{ 1 };
+        uint16_t ignored_phases{ 1 };
 
         for (CsvLine line : lines) {
 
-            //if (line.getDouble(0) == NULL && line.getInt(0) == NULL && line.getString(0) == "") {
-            if (!header_ignored) {
+            // Ignore the footer
+            if (line.getString(0).length() > 25 && line.getString(8).length() < 16 ) {
 
-                switch (ignored_phase) {
-                
-                case 1: // Ignore the first line of the Header
-                    ignored_phase++;
-                    continue;
-
-                case 2: // Set the Bonus Name to insert later in Deductibles
-                    ignored_phase++;
-                    for (uint16_t column{ 0 }; column < glb::NBR_COLUMN_IN_CSV_FILE; column++) {
-
-                        if (line.getString(column) != "") {
-                            deductible_bonus_name = line.getString(column);
-#if DEBUG
-                            std::cout << "Bonus Name: " << deductible_bonus_name << '\n';
-#endif // DEBUG
-                            break;
-                        }
-                        std::cout << "Bonus Name NOT FOUND \n";
-                    }
-                    continue;
-
-                case 3: // Set the Year and State to insert later in the Insurance
-                    ignored_phase++;
-                    insurance_year = line.getString(6);
-                    insurance_state = line.getString(7);
-                    continue;
-
-                case 4: // Set the age category to insert later in the Deductibles
-                    ignored_phase++;
-                    deductible_age_category = line.getString(6);
-                    continue;
-
-                case 5: // Set the Region to insert later in Deductibles
-                    ignored_phase++;
-                    // Take the last char of the column, then substract a char '0' who give the real number(1) in uint16_t
-                    deductible_region = (uint16_t)(line.getString(6)[line.getString(6).size() - 1] - '0'); // TODO Error change for substract the full string but the last char
-
-#if DEBUG
-                    std::cout << "Region: " << deductible_region << '\n';
-#endif // DEBUG
-                    continue;
-
-                default:
-                    // Skip line in footer where there is no Insurance Name
-                    if (line.getString(6) == "" && header_ignored) {
-                        continue;
-                    }
-                    // TODO reset the switch maybe somewhere else
-                    break;
-                }
+                ignored_phases = 1;
+                continue;
             }
 
 
+            switch (ignored_phases) {
+                
+            case 1: // Ignore the first line of the Header
+                ignored_phases++;
+                continue;
 
+            case 2: // Set the Bonus Name to insert later in Deductibles
+                    
+                for (uint16_t column{ 0 }; column < glb::NBR_COLUMN_IN_CSV_FILE; column++) {
+
+                    if (line.getString(column) != "") {
+                        deductible_bonus_name = line.getString(column);
+#if DEBUG
+                        std::cout << "Bonus Name: " << deductible_bonus_name << '\n';
+#endif // DEBUG
+                        break;
+                    }
+                    std::cout << "Bonus Name NOT FOUND \n";
+                }
+
+                ignored_phases++;
+                continue;
+
+            case 3: // Set the Year and State to insert later in the Insurance
+
+                insurance_year = line.getString(6);
+                insurance_state = line.getString(7);
+
+                ignored_phases++;
+                continue;
+
+            case 4: // Set the age category to insert later in the Deductibles
+
+                deductible_age_category = line.getString(6);
+
+                ignored_phases++;
+                continue;
+
+            case 5: // Set the Region to insert later in Deductibles
+
+                // Take the last char of the column, then substract a char '0' who give the real number(1) in uint16_t
+                deductible_region = (uint16_t)(line.getString(6)[line.getString(6).size() - 1] - '0');
+#if DEBUG
+                std::cout << "last Char in region found: " << (uint16_t)(line.getString(6)[line.getString(6).size() - 1] - '0') << '\n';
+                std::cout << "Region: " << deductible_region << '\n';
+#endif // DEBUG
+
+                ignored_phases++;
+                continue;
+                    
+            case 6:
+                // Skip line in footer
+                if (line.getString(0) == "Bundesamt für Gesundheit, 3003 Bern"
+                    || line.getString(0) == "Office fédéral de la santé publique, 3003 Berne") {
+                    continue;
+                }
+                else {
+                    //ignored_phases = 0;
+                    break;
+                }
+            }
+            
+            // Insurance creation 
             HealthInsurance insurance;
             Deductible deductible_with_accidents;
             Deductible deductible_without_accidents;
@@ -249,9 +268,24 @@ namespace ctrl {
                 column++;
             }
 
+
+            if (line.getString(column)[0] == '"') {
+
+                std::cout << "Start with: \"\n";
+
+                insurance.setInsuranceName(line.getString(column).erase(0, 1));
+                column++;
+
+                deductible_with_accidents.setDeductibleModelName(line.getString(column).erase(line.getString(column).size() - 1));
+                deductible_without_accidents.setDeductibleModelName(line.getString(column).erase(line.getString(column).size() - 1));
+            }
+
             // Insert in insurance (name)
-            insurance.setInsuranceName(line.getString(column));
-            column++;
+            else {
+                insurance.setInsuranceName(line.getString(column));
+            }
+                column++;
+            
 
             // Insert in deductible (0/300 to 600/2500) WITHOUT accidents risk
             deductible_without_accidents.setDeductibleAccidentRisk(false);
@@ -269,8 +303,6 @@ namespace ctrl {
             insurance.addDeductibleToInsurance(deductible_without_accidents);
 
             list_insurances.push_back(insurance);
-
-            header_ignored = false;
         }
     }
 

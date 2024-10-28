@@ -5,15 +5,15 @@
 
 namespace logic {
 
-    void Deductible::displayDeductible(void) const {
-        std::cout << "Bonus name: " << m_bonus_name << '\n';
-        std::cout << "Model name: " << m_model_name << '\n';
-        std::cout << "Age category: " << m_age_category << '\n';
+    void Deductible::displayDeductible(uint16_t line) const {
+        std::cout << "Line: " << line << " Bonus name: " << m_bonus_name << '\n';
+        std::cout << "Line: " << line << " Model name: " << m_model_name << '\n';
+        std::cout << "Line: " << line << " Age category: " << m_age_category << '\n';
         for (uint16_t i{ 0 }; i < glb::NBR_VALUES_PER_DEDUCTIBLE; i++) {
-            std::cout << "Deductibles values: " << m_deductible_values[i] << '\n';
+            std::cout << "Line: " << line << " Deductibles values: " << m_deductible_values[i] << '\n';
         }
-        std::cout << "Region: " << m_region << '\n';
-        std::cout << "Accidents risk: " << (m_accidents_risk ? "Yes" : "No") << '\n';
+        std::cout << "Line: " << line << " Region: " << m_region << '\n';
+        std::cout << "Line: " << line << " Accidents risk: " << (m_accidents_risk ? "Yes" : "No") << '\n';
     }
 
 
