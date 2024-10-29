@@ -4,24 +4,28 @@
 
 namespace user {
 
-	// TODO: Display Database
-	// TODO: Add CSV to Database
-	// TODO: DEBUG mode on/off
-	// TODO: 
+	uint16_t getUserChoice(uint16_t N) {
 
-	void listUserChoices(const std::string* array_of_choices, uint16_t size) {
+		uint16_t user_choice{ 0 };
 
-		std::cout << "In List User Choices\n"; // DEBUG
-
-		for (uint16_t i{ 0 }; i < size; ++i) {
-			std::cout << i + 1 << " - " << array_of_choices[i] << '\n';
+		std::cin >> user_choice;
+		
+		if (std::cin.fail()) {
+			system("cls");
+			std::cout << "Option choosed isn't numeric\n\n";
+			std::cin.clear();
+			std::cin.ignore(256, '\n');
+			return 0;
 		}
-	}
 
-	std::string choices_main_menu[]{
-		"Display Database",
-		"Add CSV to Database",
-		"Change DEBUG mode"
-	};
+		if (user_choice > N) {
+			system("cls");
+			std::cout << "Option choosed doesn't exist\n\n";
+			return 0;
+		}
+
+		return user_choice;
+
+	}
 
 } // namespace user

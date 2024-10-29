@@ -43,6 +43,7 @@ namespace db {
 		uint16_t m_region{ 0 };
 		bool m_accidents_risk{ false };
 	};
+
 	
 	class SqlConnection{
 	
@@ -58,11 +59,16 @@ namespace db {
 		void saveInTableDeductibles(const TableDeductible& deductible);
 
 
+		TableDeductible& findDeductibleWithLessThan(const uint16_t value) const;
+
 		// To check if entry is aleready in DB
 		uint16_t findInsuranceIDByName(const std::string& insurance_name) const;
+
 		uint16_t findBonusIDByName(const std::string& bonus_name) const;
+
 		uint16_t findAgeIDByName(const std::string& age_name) const;
 
+		
 
 		void displayAllTableData(void);
 		void displayAllDataFromOneTable(const std::string& table_name);
@@ -71,6 +77,8 @@ namespace db {
 		void deleteData(void); // Not used for now
 
 	private:
+
+		std::string findNameInTableByID(const std::string& table_name, const uint16_t id) const;
 		uint16_t findIDInTableByName(const std::string& table_name, const std::string& name) const;
 		void connectToSqlDatabase(void);
 		bool isConnectionOpen(void) const;

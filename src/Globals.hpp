@@ -35,7 +35,8 @@
 //uint16_t saveHealthInsuranceInDatabase(std::string& my_string = "example", const HealthInsurance& insurance);
 
 namespace glb{
-
+	inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // CSV without children, cause there is 2 more columns
+	//inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
 	inline const uint16_t NBR_VALUES_PER_DEDUCTIBLE{ 6 };
 	inline const uint16_t NBR_COLUMN_IN_CSV_FILE{ 13 };
 

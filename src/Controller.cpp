@@ -8,6 +8,7 @@
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
 #include "UserInteraction.hpp"
+#include "Algorithm.hpp"
 
 namespace ctrl {
 
@@ -18,17 +19,60 @@ namespace ctrl {
     using logic::Deductible;
 
 
-    void displayUserChoices(void) {
+    void startApplication(int argc, char* argv[]) {
+
         using namespace user;
 
+        bool app_runing{ true };
         uint16_t user_choice{ 0 };
-        
-		listUserChoices(choices_main_menu);
 
-        // TODO: Display Database
-        // TODO: Add CSV to Database
-        // TODO: DEBUG mode on/off
-        // TODO: 
+        while (app_runing) {
+
+            switch (user_choice) {
+
+            case 0: // Choice of the user
+                user_choice = listUserChoices(choices_main_menu);
+
+                break;
+
+            case 1: // Algorithm
+                user_choice = listUserChoices(choices_algorithm);
+                // TODO
+
+
+                user_choice = 0;
+                break;
+
+            case 2: // Display the current DB
+                displayDatabase();
+
+                user_choice = 0;
+                break;
+
+            case 3:  // Create a new DB an insert a CSV
+                createNewDatabase();
+                createHealthInsurancesFromCSV(glb::path, argc, argv);
+
+                user_choice = 0;
+                break;
+
+            case 4:// TODO: make a function
+                DEBUG != DEBUG;
+
+                user_choice = 0;
+                break;
+
+            case 5: // Stop app
+
+                app_runing = false;
+                break;
+
+            default:
+                std::cout << "Error in Selection of the User\n";
+                user_choice = 0;
+                break;
+            }
+        }
     }
 
 

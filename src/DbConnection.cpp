@@ -401,6 +401,41 @@ namespace db {
     }
 
 
+	// Return the Name inside a Table with the ID passed in parameter
+    std::string SqlConnection::findNameInTableByID(const std::string& table_name, const uint16_t id) const {
+
+        if (!isConnectionOpen()) {
+            return;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "SELECT name"
+                    " FROM " + table_name +
+                    " WHERE id = ? ;"
+                )
+            );
+
+            p_prep_statement->setInt(1, id);
+            std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
+
+            if (result->next()) {
+                return result->getString("name");
+            }
+            else {
+                return NULL;
+            }
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
+
     // Return an ID by searching the name inside the Table passed in parameters
     uint16_t SqlConnection::findIDInTableByName(const std::string& table_name, const std::string& name) const {
 

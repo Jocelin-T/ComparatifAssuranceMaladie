@@ -32,7 +32,7 @@ namespace ctrl {
 	using ext::CsvLine;
 
 
-	void displayUserChoices(void);
+	void startApplication(int argc, char* argv[]);
 
 	/**
 	* @brief Creates a new database by dropping all existing tables and creating new ones.

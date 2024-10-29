@@ -50,22 +50,13 @@ int main(int argc, char* argv[]){
     // Clear console
     system("cls");
 
-
 #if DEBUG
     std::cout << "DEBUG mode true\n";
-    //std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
-    std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // CSV without children, cause there is 2 more columns
 #else 
     std::cout << "DEBUG mode false\n";
-    std::string path{ "" };
 #endif // DEBUG
 
-
-    //createNewDatabase();
-    //createHealthInsurancesFromCSV(path, argc, argv);
-    //displayDatabase();
-
-    displayUserChoices();
+    startApplication(argc, argv);
 
     
 	return 0;
