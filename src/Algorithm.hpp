@@ -13,12 +13,11 @@
 #include "Typedef.hpp"
 
 class Deductible;
+namespace algo {
 
-class Algorithm {
-	// --- option vector ptr --- 
-	//std::unique_ptr<std::vector<Deductible>> m_p_deductibles =
-	//	std::make_unique<std::vector<Deductible>>();
+	class Algorithm {
+		// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
 
-	// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
-};
+	};
+}
 

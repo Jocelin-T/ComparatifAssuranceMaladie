@@ -140,8 +140,7 @@ namespace ctrl {
 		const HealthInsurance& insurance,
 		const uint16_t fk_insurance,
 		const uint16_t fk_bonus,
-		const uint16_t fk_age,
-		uint16_t line
+		const uint16_t fk_age
 	);
 	
 
@@ -161,12 +160,6 @@ namespace ctrl {
 	void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
 
-	void parseHeaderContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
-
-	void parseMainContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
-
-
-	void parceFooterContent(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
 } // namespace ctrl

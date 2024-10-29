@@ -60,10 +60,11 @@ int main(int argc, char* argv[]){
     std::string path{ "" };
 #endif // DEBUG
 
-    createNewDatabase();
+    //createNewDatabase();
 
-    createHealthInsurancesFromCSV(path, argc, argv);
     //createHealthInsurancesFromCSV(path, argc, argv);
+
+
 
     displayDatabase();
     

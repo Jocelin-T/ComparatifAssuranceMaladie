@@ -15,60 +15,60 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="HealthInsurance.cpp">
+    <ClCompile Include="src\HealthInsurance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleView.cpp">
+    <ClCompile Include="src\ConsoleView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DbConnection.cpp">
+    <ClCompile Include="src\DbConnection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileManagement.cpp">
+    <ClCompile Include="src\FileManagement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Controller.cpp">
+    <ClCompile Include="src\Controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithm.cpp">
+    <ClCompile Include="src\Algorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Deductible.cpp">
+    <ClCompile Include="src\Deductible.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HealthInsurance.hpp">
+    <ClInclude Include="src\HealthInsurance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleView.hpp">
+    <ClInclude Include="src\ConsoleView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DbConnection.hpp">
+    <ClInclude Include="src\DbConnection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileManagement.hpp">
+    <ClInclude Include="src\FileManagement.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Config.hpp">
+    <ClInclude Include="src\Config.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Controller.hpp">
+    <ClInclude Include="src\Controller.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithm.hpp">
+    <ClInclude Include="src\Algorithm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Typedef.hpp">
+    <ClInclude Include="src\Typedef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.hpp">
+    <ClInclude Include="src\Globals.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Deductible.hpp">
+    <ClInclude Include="src\Deductible.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

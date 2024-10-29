@@ -147,26 +147,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Algorithm.cpp" />
-    <ClCompile Include="ConsoleView.cpp" />
-    <ClCompile Include="Controller.cpp" />
-    <ClCompile Include="DbConnection.cpp" />
-    <ClCompile Include="Deductible.cpp" />
-    <ClCompile Include="HealthInsurance.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="FileManagement.cpp" />
+    <ClCompile Include="src\Algorithm.cpp" />
+    <ClCompile Include="src\ConsoleView.cpp" />
+    <ClCompile Include="src\Controller.cpp" />
+    <ClCompile Include="src\DbConnection.cpp" />
+    <ClCompile Include="src\Deductible.cpp" />
+    <ClCompile Include="src\HealthInsurance.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\FileManagement.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Algorithm.hpp" />
-    <ClInclude Include="Config.hpp" />
-    <ClInclude Include="ConsoleView.hpp" />
-    <ClInclude Include="Controller.hpp" />
-    <ClInclude Include="DbConnection.hpp" />
-    <ClInclude Include="Deductible.hpp" />
-    <ClInclude Include="Globals.hpp" />
-    <ClInclude Include="HealthInsurance.hpp" />
-    <ClInclude Include="FileManagement.hpp" />
-    <ClInclude Include="Typedef.hpp" />
+    <ClInclude Include="src\Algorithm.hpp" />
+    <ClInclude Include="src\Config.hpp" />
+    <ClInclude Include="src\ConsoleView.hpp" />
+    <ClInclude Include="src\Controller.hpp" />
+    <ClInclude Include="src\DbConnection.hpp" />
+    <ClInclude Include="src\Deductible.hpp" />
+    <ClInclude Include="src\Globals.hpp" />
+    <ClInclude Include="src\HealthInsurance.hpp" />
+    <ClInclude Include="src\FileManagement.hpp" />
+    <ClInclude Include="src\Typedef.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

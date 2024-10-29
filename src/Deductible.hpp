@@ -14,7 +14,7 @@ namespace logic {
 	class Deductible {
 	public:
 
-		void displayDeductible(uint16_t line) const;
+		void displayDeductible(void) const;
 
 		// Setter
 		void setDeductibleBonusName(const std::string& bonus_name);
