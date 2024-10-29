@@ -155,6 +155,7 @@
     <ClCompile Include="src\HealthInsurance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\FileManagement.cpp" />
+    <ClCompile Include="src\UserInteraction.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Algorithm.hpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="src\HealthInsurance.hpp" />
     <ClInclude Include="src\FileManagement.hpp" />
     <ClInclude Include="src\Typedef.hpp" />
+    <ClInclude Include="src\UserInteraction.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

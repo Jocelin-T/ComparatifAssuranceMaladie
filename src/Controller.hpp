@@ -31,6 +31,9 @@ namespace ctrl {
 	using db::SqlConnection;
 	using ext::CsvLine;
 
+
+	void displayUserChoices(void);
+
 	/**
 	* @brief Creates a new database by dropping all existing tables and creating new ones.
 	*

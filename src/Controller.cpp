@@ -7,6 +7,7 @@
 #include "Deductible.hpp"
 #include "DbConnection.hpp"
 #include "FileManagement.hpp"
+#include "UserInteraction.hpp"
 
 namespace ctrl {
 
@@ -15,6 +16,21 @@ namespace ctrl {
     using ext::CsvRead;
     using ext::CsvWrite;
     using logic::Deductible;
+
+
+    void displayUserChoices(void) {
+        using namespace user;
+
+        uint16_t user_choice{ 0 };
+        
+		listUserChoices(choices_main_menu);
+
+        // TODO: Display Database
+        // TODO: Add CSV to Database
+        // TODO: DEBUG mode on/off
+        // TODO: 
+    }
+
 
     void createNewDatabase(void) {
         SqlConnection connect;
