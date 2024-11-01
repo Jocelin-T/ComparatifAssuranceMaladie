@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "Controller.hpp"
 #include "Config.hpp"
 #include "Globals.hpp"
@@ -10,6 +8,8 @@
 #include "UserInteraction.hpp"
 #include "Algorithm.hpp"
 
+#include <iostream>
+
 namespace ctrl {
 
     // namespace used
@@ -19,14 +19,22 @@ namespace ctrl {
     using logic::Deductible;
 
 
-    void startApplication(int argc, char* argv[]) {
+    void runApplication(int argc, char* argv[]) {
 
         using namespace user;
+        using namespace algo;
 
         bool app_runing{ true };
         uint16_t user_choice{ 0 };
+        SqlConnection connect;
 
         while (app_runing) {
+
+#if DEBUG
+
+#else
+            system("cls");
+#endif // DEBUG
 
             switch (user_choice) {
 
@@ -36,9 +44,18 @@ namespace ctrl {
                 break;
 
             case 1: // Algorithm
-                user_choice = listUserChoices(choices_algorithm);
-                // TODO
+                //user_choice = listUserChoices(choices_algorithm);
+                user_choice = 1;
 
+                if (user_choice == 1) {
+                runAlgorithm(
+                    askUserMaximumFee(connect.findLowestBonus()),
+                    1,
+                    25);
+                }
+                if (user_choice == 2) {
+                    algorithmTest();
+                }
 
                 user_choice = 0;
                 break;
@@ -57,7 +74,9 @@ namespace ctrl {
                 break;
 
             case 4:// TODO: make a function
-                DEBUG != DEBUG;
+                //DEBUG != DEBUG;
+
+                std::cout << connect.findLowestBonus() << '\n';
 
                 user_choice = 0;
                 break;

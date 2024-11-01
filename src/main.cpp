@@ -56,7 +56,7 @@ int main(int argc, char* argv[]){
     std::cout << "DEBUG mode false\n";
 #endif // DEBUG
 
-    startApplication(argc, argv);
+    runApplication(argc, argv);
 
     
 	return 0;

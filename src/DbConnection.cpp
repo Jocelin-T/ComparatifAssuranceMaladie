@@ -223,6 +223,7 @@ namespace db {
         }
     }
 
+
     // Insert in Table Deductible
     void SqlConnection::saveInTableDeductibles(const TableDeductible& deductible) {
 
@@ -266,6 +267,36 @@ namespace db {
             p_prep_statement->setBoolean(12, deductible.m_accidents_risk);
 
             p_prep_statement->execute();
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
+
+    uint16_t SqlConnection::findLowestBonus(void) const {
+
+        if (!isConnectionOpen()) {
+            return 0;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "SELECT MIN(deduc_6)"
+                    " FROM " + m_TABLE_DEDUCTIBLES +
+                    " WHERE deduc_6 > 0;"
+                )
+            );
+
+            std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
+
+            if (result->next()) {
+                return result->getDouble("MIN(deduc_6)");
+            }
         }
         catch (sql::SQLException& e) {
             std::cerr << "SQL Error: " << e.what() << std::endl;
@@ -405,7 +436,7 @@ namespace db {
     std::string SqlConnection::findNameInTableByID(const std::string& table_name, const uint16_t id) const {
 
         if (!isConnectionOpen()) {
-            return;
+            return "";
         }
 
         try {
@@ -424,7 +455,7 @@ namespace db {
                 return result->getString("name");
             }
             else {
-                return NULL;
+                return "";
             }
         }
         catch (sql::SQLException& e) {

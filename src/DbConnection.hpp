@@ -61,6 +61,18 @@ namespace db {
 
 		TableDeductible& findDeductibleWithLessThan(const uint16_t value) const;
 
+
+		// @brief Finds the lowest non-zero deductible amount in the Deductibles table.
+		//
+		// This function queries the database to find the minimum value of the deduc_6 column
+		// in the Deductibles table, excluding zero values. It handles potential database
+		// connection issues and SQL exceptions.
+		//
+		// @return (uint16_t) => The lowest non-zero deductible amount found.
+		//                       Returns 0 if no valid deductible is found or if an error occurs.
+		//
+		uint16_t findLowestBonus(void) const;
+
 		// To check if entry is aleready in DB
 		uint16_t findInsuranceIDByName(const std::string& insurance_name) const;
 

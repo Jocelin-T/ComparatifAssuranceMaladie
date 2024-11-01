@@ -14,9 +14,14 @@
 
 namespace algo {
 
-	class Algorithm {
-		// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
+	// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
 
-	};
+	void runAlgorithm(const float user_fee, const uint16_t user_region, const uint16_t user_age);
+
+	void setAlgorithmParameters(const float user_fee, const uint16_t user_region, const uint16_t user_age);
+
+	// Debug function
+	void algorithmTest(void);
+
 } // namespace algo
 

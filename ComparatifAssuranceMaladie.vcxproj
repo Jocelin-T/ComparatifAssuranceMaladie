@@ -152,6 +152,7 @@
     <ClCompile Include="src\Controller.cpp" />
     <ClCompile Include="src\DbConnection.cpp" />
     <ClCompile Include="src\Deductible.cpp" />
+    <ClCompile Include="src\Globals.cpp" />
     <ClCompile Include="src\HealthInsurance.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\FileManagement.cpp" />
