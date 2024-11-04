@@ -18,7 +18,7 @@ namespace db {
     const std::string m_TABLE_DEDUCTIBLES{ "DEDUCTIBLES" };
    
     // Add Tables references here!
-    std::vector<const std::string*> m_list_tables_name{
+    std::vector<const std::string*> m_list_tables_names{
         &m_TABLE_INSURANCES,
         &m_TABLE_BONUSES,
         &m_TABLE_AGES,
@@ -48,7 +48,7 @@ namespace db {
             p_statement->execute("SET FOREIGN_KEY_CHECKS = 0;");
 
             // Drop tables if they exist
-            for (const std::string* table_name : m_list_tables_name) {
+            for (const std::string* table_name : m_list_tables_names) {
                 p_statement->execute("DROP TABLE IF EXISTS " + *table_name);
             }
 
@@ -306,6 +306,146 @@ namespace db {
         }
     }
 
+    // Return an array(pointer) with all differents regions found in the DB
+    std::vector<uint16_t> SqlConnection::findAllDifferentRegions(void) const {
+
+        std::vector<uint16_t> regions;
+
+        if (!isConnectionOpen()) {
+            return regions;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "SELECT DISTINCT region"
+                    " FROM " + m_TABLE_DEDUCTIBLES +
+                    " ;"
+                )
+            );
+
+            std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
+
+            while (true) {
+                if (result->next()) {
+					regions.push_back(result->getInt("region"));
+                }
+                else {
+                    return regions;
+                }
+            }
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
+
+    uint16_t SqlConnection::findLowestAge(void) const {
+
+        if (!isConnectionOpen()) {
+            return 0;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "SELECT MIN(start)"
+                    " FROM " + m_TABLE_AGES +
+                    " ;"
+                )
+            );
+
+            std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
+
+            while (true) {
+                if (result->next()) {
+					return result->getInt("MIN(start)");
+                }
+            }
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
+
+    std::vector<InsuranceIDAndDeductible>& SqlConnection::findAllCorrespondingDeductibles(const uint16_t deductible_level, const uint16_t age, const uint16_t region, const bool accident) {
+
+
+        std::vector<InsuranceIDAndDeductible> data_to_send;
+        if (!isConnectionOpen()) {
+            return data_to_send;
+        }
+
+        data_to_send.reserve(100);
+        std::string field_to_check{ "deduc_1" };
+
+        switch (deductible_level) {
+        case 1:
+            field_to_check = "deduc_1, deduc_2";
+            break;
+
+        case 2:
+            field_to_check = "deduc_1, deduc_2, deduc_3";
+            break;
+
+        case 3:
+            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, ";
+            break;
+
+        case 4:
+            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, deduc_5";
+            break;
+
+        case 5:
+            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, deduc_5, deduc_6";
+            break;
+
+        default:
+            field_to_check = "deduc_1";
+            break;
+        }
+
+        try {
+            std::unique_ptr<sql::PreparedStatement> p_prep_statement(
+                m_p_connection->prepareStatement(
+                    "SELECT id, " + field_to_check +
+                    " FROM " + m_TABLE_DEDUCTIBLES +
+                    " ORDER BY " + field_to_check + " ASC "
+                    " WHERE " + field_to_check + " > 0 " // TODO Error
+                    " LIMIT 100;"
+                )
+            );
+
+            std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
+
+            if (result->next()) {
+                
+                InsuranceIDAndDeductible data;
+                data.m_bonus = result->getInt(field_to_check);
+                data.m_id = result->getInt("id");
+                
+                data_to_send.push_back(data);
+            }
+
+            return data_to_send;
+        }
+        catch (sql::SQLException& e) {
+            std::cerr << "SQL Error: " << e.what() << std::endl;
+        }
+        catch (std::exception& e) {
+            std::cerr << "Error: " << e.what() << std::endl;
+        }
+    }
+
+
     // Return the insurance ID with the insurance name passed has parameter, or 0 if not found
     uint16_t SqlConnection::findInsuranceIDByName(const std::string& insurance_name) const {
 
@@ -330,7 +470,7 @@ namespace db {
     // Read all Data from all Tables
     void SqlConnection::displayAllTableData(void) {
 
-        for (const std::string* table_name : m_list_tables_name) {
+        for (const std::string* table_name : m_list_tables_names) {
             displayAllDataFromOneTable(*table_name);
         }
     }

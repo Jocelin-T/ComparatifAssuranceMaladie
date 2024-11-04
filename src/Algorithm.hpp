@@ -9,16 +9,30 @@
 
 #include "Typedef.hpp"
 
-#include <string>
-
-
 namespace algo {
-
 	// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
 
-	void runAlgorithm(const float user_fee, const uint16_t user_region, const uint16_t user_age);
+	struct AlgorithmParameters {
+		float user_choosed_maximum_fee{ 0.0f };
+		uint16_t user_choosed_region{ 999 };
+		uint16_t user_choosed_age{ 999 };
+		bool user_choosed_accident{ false };
+	};
 
-	void setAlgorithmParameters(const float user_fee, const uint16_t user_region, const uint16_t user_age);
+	inline const uint16_t ALGO_MAX_ENTRIES{ 100 };
+	inline uint16_t insurances_id[ALGO_MAX_ENTRIES];
+	inline uint16_t bonuses[ALGO_MAX_ENTRIES];
+
+	void runAlgorithm(const AlgorithmParameters& params);
+
+	AlgorithmParameters& setAlgorithmParameters(
+		const float user_max_fee,
+		const uint16_t user_region,
+		const uint16_t user_age,
+		const bool user_accident
+	);
+
+	void findBestInsurance();
 
 	// Debug function
 	void algorithmTest(void);

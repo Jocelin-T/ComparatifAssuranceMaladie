@@ -44,22 +44,71 @@ namespace db {
 		bool m_accidents_risk{ false };
 	};
 
+	struct InsuranceIDAndDeductible {
+		uint16_t m_id{ 0 };
+		float m_bonus{ 0.0f };
+	};
 	
 	class SqlConnection{
-	
 	public:
+
 		SqlConnection(void);
 
+
+		// @brief Drops all tables in the connected database.
+		//
+		// This function attempts to drop all tables listed in m_list_tables_names.
+		// It temporarily disables foreign key checks to allow dropping tables
+		// with dependencies. After dropping the tables, it re-enables foreign key checks.
+		//
+		// @param (void)
+		//
+		// @return (void)
+		//
 		void dropAllTables(void);
+
+
+		// @brief Creates all tables in the connected database.
+		//
+		// This function attempts to create all tables defined for the database.
+		// It creates tables for insurances, bonuses, ages, and deductibles,
+		// establishing the necessary relationships between them using foreign keys.
+		//
+		// @param (void)
+		//
+		// @return (void)
+		//
 		void createAllTables(void);
 
+
+		// @brief Saves an insurance record in the "INSURANCES" table.
+		//
+		// This function inserts an insurance record into the "INSURANCES" table.
+		// It ensures that the name field is correctly populated and
+		// handles any database constraints or requirements.
+		//
+		// @param insurance_name (const std::string&)	=> The name of the insurance to be saved.
+		//
+		// @return (void)
 		void saveInTableInsurances(const std::string& insurance_name);
+
+
+		// @brief Saves a bonus record in the bonuses table.
+		//
+		// This function inserts a new bonus record into the bonuses table of the database.
+		// It ensures that the bonus name is correctly inserted and handles any database
+		// constraints or requirements.
+		//
+		// @param bonus_name (const std::string&)   => The name of the bonus to be saved.
+		//
+		// @return (void)
 		void saveInTableBonuses(const std::string& bonus_name);
+
+
 		void saveInTableAge(const std::string& age_category_name, const uint16_t start_age, const uint16_t end_age);
+
+
 		void saveInTableDeductibles(const TableDeductible& deductible);
-
-
-		TableDeductible& findDeductibleWithLessThan(const uint16_t value) const;
 
 
 		// @brief Finds the lowest non-zero deductible amount in the Deductibles table.
@@ -70,8 +119,34 @@ namespace db {
 		//
 		// @return (uint16_t) => The lowest non-zero deductible amount found.
 		//                       Returns 0 if no valid deductible is found or if an error occurs.
-		//
 		uint16_t findLowestBonus(void) const;
+
+
+		// @brief Retrieves all distinct regions from the deductibles table.
+		//
+		// This function queries the database to find all unique region values
+		// stored in the deductibles table. It represents all the different
+		// regions for which insurance data is available.
+		//
+		// @param  (void)
+		//
+		// @return (std::vector<uint16_t>)  => A vector containing all distinct region values.
+		//                                     Returns an empty vector if no regions are found
+		//                                     or if there's an error in the database connection
+		//                                     or query execution.
+		std::vector<uint16_t> findAllDifferentRegions(void) const;
+
+
+		uint16_t findLowestAge(void) const;
+
+
+		std::vector<InsuranceIDAndDeductible>& findAllCorrespondingDeductibles(
+			const uint16_t deductible_level,
+			const uint16_t age,
+			const uint16_t region,
+			const bool accident
+		);
+
 
 		// To check if entry is aleready in DB
 		uint16_t findInsuranceIDByName(const std::string& insurance_name) const;

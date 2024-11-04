@@ -6,6 +6,7 @@
  * @date   10 September 2024
  *********************************************************************/
 #pragma once
+
 #include <string>
 #include <vector>
 
@@ -24,12 +25,17 @@ namespace ext {
 	class CsvLine;
 }
 
+namespace algo {
+	struct AlgorithmParameters;
+}
+
 namespace ctrl {
 
 	// Used namespace
 	using logic::HealthInsurance;
 	using db::SqlConnection;
 	using ext::CsvLine;
+	using algo::AlgorithmParameters;
 
 
 	void runApplication(int argc, char* argv[]);
@@ -163,6 +169,13 @@ namespace ctrl {
 	void createNewHealthInsurance(const std::vector<CsvLine>& lines, std::vector<HealthInsurance>& list_insurances);
 
 
+
+	void populateArraysOfAlgorithm(
+		const AlgorithmParameters& params,
+		SqlConnection& connection,
+		uint16_t* array_insurances_id,
+		uint16_t* array_bonuses
+	);
 
 
 } // namespace ctrl

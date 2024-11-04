@@ -20,7 +20,10 @@
 
 // To generate code with Tabnine:
 
-// Can you write the comment for this function in the same style (the data type, the sign => who are aligned in the same column) as below:
+// Can you write the comment for this function in the same style 
+//	(the data type of the parameters and return between (),
+//	the sign => who are aligned in the same column) as below:
+// 
 // @brief Saves a health insurance record in the database.
 //
 // This function inserts a health insurance record into the database.

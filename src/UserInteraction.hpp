@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 
 #include "Typedef.hpp"
 #include "Globals.hpp"
@@ -9,14 +10,16 @@
 
 namespace user {
 
-	float askUserMaximumFee(const float min_bonus);
+	float askUserMaximumFee(void);
 
-	uint16_t askUserRegion(void);
+	uint16_t askUserRegion(const std::vector<uint16_t>& array_regions);
 
-	uint16_t askUserAge(void);
+	uint16_t askUserAge(const uint16_t min_age);
+
+	bool askUserAccident(void);
 
 
-	uint16_t getUserChoice(uint16_t N);
+	uint16_t getUserChoice(uint16_t array_size);
 
 	// Template need to be in the header and order matter
 	template <uint16_t N> // N => size of the array passed 
