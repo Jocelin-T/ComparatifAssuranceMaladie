@@ -174,7 +174,8 @@ namespace ctrl {
 		const AlgorithmParameters& params,
 		SqlConnection& connection,
 		uint16_t* array_insurances_id,
-		uint16_t* array_bonuses
+		float* array_bonuses, 
+		uint16_t* array_deductibles
 	);
 
 

@@ -55,7 +55,7 @@ namespace ctrl {
                         askUserAge(connect.findLowestAge()),
                         askUserAccident());
 
-                    populateArraysOfAlgorithm(params, connect, insurances_id, bonuses);
+                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, bonuses_matching, deductibles_matching);
 
                     runAlgorithm(params);
                 }
@@ -75,13 +75,12 @@ namespace ctrl {
 
             case 3:  // Create a new DB an insert a CSV
                 createNewDatabase();
-                createHealthInsurancesFromCSV(glb::path, argc, argv);
+                createHealthInsurancesFromCSV(global::path, argc, argv);
 
                 user_choice = 0;
                 break;
 
             case 4:// TODO: make a function
-                //DEBUG != DEBUG;
 
                 std::cout << connect.findLowestAge() << '\n';
 
@@ -274,7 +273,7 @@ namespace ctrl {
 
             case 2: // Set the Bonus Name to insert later in Deductibles
                     
-                for (uint16_t column{ 0 }; column < glb::NBR_COLUMN_IN_CSV_FILE; column++) {
+                for (uint16_t column{ 0 }; column < global::NBR_COLUMN_IN_CSV_FILE; column++) {
 
                     if (line.getString(column) != "") {
                         deductible_bonus_name = line.getString(column);
@@ -381,21 +380,20 @@ namespace ctrl {
     }
 
 
-    void populateArraysOfAlgorithm(const AlgorithmParameters& params, SqlConnection& connection, uint16_t* array_insurances_id, uint16_t* array_bonuses) {
+    void populateArraysOfAlgorithm(const AlgorithmParameters& params, SqlConnection& connection, uint16_t* array_insurances_id, float* array_bonuses, uint16_t* array_deductibles) {
         
-        uint16_t deductible_level{ 0 };
+        uint16_t deductible_level{ 5 }; 
         std::vector<InsuranceIDAndDeductible> data_from_db;
-        data_from_db.reserve(100);
 
-        if (params.user_choosed_maximum_fee > 0) {
-            for (const uint16_t deductible: glb::DEDUCTIBLES_POSSIBLE) {
+        // TODO: useless maybe, else change deductible_level to 0
+        //if (params.user_choosed_max_fee > 0) {
+        //    for (uint16_t i{ 1 }; i < global::NBR_DEDUCTIBLES_PER_INSURANCE; i++) {
 
-                deductible_level++;
-                if (params.user_choosed_maximum_fee > deductible) {
-                    break;
-                }
-            }
-        }
+        //        if (params.user_choosed_max_fee > global::DEDUCTIBLES_POSSIBLE[i]) {
+        //            deductible_level++;
+        //        }
+        //    }
+        //}
         
         data_from_db = connection.findAllCorrespondingDeductibles(
             deductible_level,
@@ -404,12 +402,20 @@ namespace ctrl {
             params.user_choosed_accident
         );
 
-        uint16_t index{ 0 };
-        for (const InsuranceIDAndDeductible& data : data_from_db) {
+        data_from_db.shrink_to_fit();
+        for (uint16_t i{ 0 }; i < data_from_db.size(); i++) {
 
-            array_insurances_id[index] = data.m_id;
-            array_bonuses[index] = data.m_bonus;
-            index++;
+#if DEBUG
+            std::cout << "Loop " << i 
+                << " - ID: " << data_from_db[i].m_id 
+                << " Data: " << data_from_db[i].m_bonus 
+                << " Deductible: " << global::DEDUCTIBLES_POSSIBLE[data_from_db[i].m_deductible]
+                << '\n';
+#endif // DEBUG
+
+            array_insurances_id[i] = data_from_db[i].m_id;
+            array_bonuses[i] = data_from_db[i].m_bonus;
+            array_deductibles[i] = global::DEDUCTIBLES_POSSIBLE[data_from_db[i].m_deductible];
         }
     }
 

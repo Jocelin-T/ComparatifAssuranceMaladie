@@ -11,12 +11,38 @@ namespace db {
     const std::string m_DATABASE_PASSWORD = "";
     const std::string m_DATABASE_NAME = "health_insurance";
 
-    // Tables names
-    const std::string m_TABLE_INSURANCES{ "INSURANCES" }; // hold insurances name
+    // Tables
+    const std::string m_TABLE_INSURANCES{ "INSURANCES" };
+    const std::string m_INS_ID{ "ins_id" };
+    const std::string m_INS_NAME{ "ins_name" };
+
     const std::string m_TABLE_BONUSES{ "BONUSES" };
+    const std::string m_BON_ID{ "bon_id" };
+    const std::string m_BON_NAME{ "bon_name" };
+
     const std::string m_TABLE_AGES{ "AGES" };
+	const std::string m_AGE_ID{ "age_id" };
+	const std::string m_AGE_NAME{ "age_name" };
+	const std::string m_AGE_MIN{ "age_min" };
+	const std::string m_AGE_MAX{ "age_max" };
+
     const std::string m_TABLE_DEDUCTIBLES{ "DEDUCTIBLES" };
-   
+	const std::string m_DED_ID{ "ded_id" };
+	const std::string m_DED_NAME{ "ded_name" };
+    const std::string m_DED_DEDUCTIBLE_1{ "ded_deductible_0" };
+	const std::string m_DED_DEDUCTIBLE_2{ "ded_deductible_1" };
+	const std::string m_DED_DEDUCTIBLE_3{ "ded_deductible_2" };
+	const std::string m_DED_DEDUCTIBLE_4{ "ded_deductible_3" };
+	const std::string m_DED_DEDUCTIBLE_5{ "ded_deductible_4" };
+	const std::string m_DED_DEDUCTIBLE_6{ "ded_deductible_5" };
+    const std::string m_DED_REGION{ "ded_region" };
+    const std::string m_DED_ACCIDENT{ "ded_accident" };
+    const std::string m_DED_FK_INSURANCE{ "fk_insurance" };
+    const std::string m_DED_FK_BONUS{ "fk_bonus" };
+    const std::string m_DED_FK_AGE{ "fk_age" };
+
+
+
     // Add Tables references here!
     std::vector<const std::string*> m_list_tables_names{
         &m_TABLE_INSURANCES,
@@ -77,48 +103,48 @@ namespace db {
             // Table Insurances (assurances)
             p_statement->execute(
                 "CREATE TABLE " + m_TABLE_INSURANCES + " ("
-                    "id INT PRIMARY KEY AUTO_INCREMENT, "
-                    "name VARCHAR(50) NOT NULL "
+                    + m_INS_ID + " INT PRIMARY KEY AUTO_INCREMENT, "
+                    + m_INS_NAME + " VARCHAR(50) NOT NULL "
                 ");"
             );
 
             // Table Bonuses (primes)
             p_statement->execute(
                 "CREATE TABLE " + m_TABLE_BONUSES + " ("
-                    "id INT PRIMARY KEY AUTO_INCREMENT, "
-                    "name VARCHAR(50) NOT NULL "
+                    + m_BON_ID + " INT PRIMARY KEY AUTO_INCREMENT, "
+                    + m_BON_NAME + " VARCHAR(50) NOT NULL "
                 ");"
             );
 
             // Table Ages
             p_statement->execute(
                 "CREATE TABLE " + m_TABLE_AGES + " ("
-                    "id INT PRIMARY KEY AUTO_INCREMENT, "
-                    "name VARCHAR(50) NOT NULL, "
-                    "start INT NOT NULL, "
-                    "end INT NOT NULL "
+                    + m_AGE_ID + " INT PRIMARY KEY AUTO_INCREMENT, "
+                    + m_AGE_NAME + " VARCHAR(50) NOT NULL, "
+                    + m_AGE_MIN + " INT NOT NULL, "
+                    + m_AGE_MAX + " INT NOT NULL "
                 ");"
             );
 
             // Table Deducitbles (franchises)
             p_statement->execute(
                 "CREATE TABLE " + m_TABLE_DEDUCTIBLES + " ("
-                    "id INT PRIMARY KEY AUTO_INCREMENT, "
-                    "fk_insurance INT NOT NULL, "
-                    "fk_bonus INT NOT NULL, "
-                    "fk_age INT NOT NULL, "
-                    "model_name VARCHAR(50) NULL, "
-                    "deduc_1 DECIMAL(6,2) NOT NULL, "
-                    "deduc_2 DECIMAL(6,2) NOT NULL, "
-                    "deduc_3 DECIMAL(6,2) NOT NULL, "
-                    "deduc_4 DECIMAL(6,2) NOT NULL, "
-                    "deduc_5 DECIMAL(6,2) NOT NULL, "
-                    "deduc_6 DECIMAL(6,2) NOT NULL, "
-                    "region INT NOT NULL, "
-                    "accident BOOL NOT NULL, "
-                    "FOREIGN KEY (fk_insurance) REFERENCES " + m_TABLE_INSURANCES + " (id), "
-                    "FOREIGN KEY (fk_bonus) REFERENCES " + m_TABLE_BONUSES + " (id), "
-                    "FOREIGN KEY (fk_age) REFERENCES " + m_TABLE_AGES + " (id)"
+                    + m_DED_ID + " INT PRIMARY KEY AUTO_INCREMENT, "
+                    + m_DED_NAME + " VARCHAR(50) NULL, "
+                    + m_DED_DEDUCTIBLE_1 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_DEDUCTIBLE_2 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_DEDUCTIBLE_3 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_DEDUCTIBLE_4 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_DEDUCTIBLE_5 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_DEDUCTIBLE_6 + " DECIMAL(6,2) NOT NULL, "
+                    + m_DED_REGION + " INT NOT NULL, "
+                    + m_DED_ACCIDENT + " BOOL NOT NULL, "
+                    + m_DED_FK_INSURANCE + " INT NOT NULL, "
+                    + m_DED_FK_BONUS + " INT NOT NULL, "
+                    + m_DED_FK_AGE + " INT NOT NULL, "
+                    "FOREIGN KEY (" + m_DED_FK_INSURANCE + ") REFERENCES " + m_TABLE_INSURANCES + " (" + m_INS_ID + "), "
+                    "FOREIGN KEY (" + m_DED_FK_BONUS + ") REFERENCES " + m_TABLE_BONUSES + " (" + m_BON_ID + "), "
+                "FOREIGN KEY (" + m_DED_FK_AGE + ") REFERENCES " + m_TABLE_AGES + " (" + m_AGE_ID + ")"
                 ");"
             );
 
@@ -145,7 +171,7 @@ namespace db {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_INSURANCES +
-                    "(name) "
+                    "(" + m_INS_NAME + ") "
                     "VALUES(?) "
                 )
             );
@@ -173,7 +199,7 @@ namespace db {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_BONUSES +
-                    "(name) "
+                    "(" + m_BON_NAME + ") "
                     "VALUES(?) "
                 )
             );
@@ -201,9 +227,9 @@ namespace db {
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_AGES +
                     "("
-                    "name, "
-                    "start, "
-                    "end "
+                    + m_AGE_NAME + ", "
+                    + m_AGE_MIN + ", "
+                    + m_AGE_MAX +
                     ") "
 
                     "VALUES(?,?,?) ")
@@ -236,35 +262,35 @@ namespace db {
                 m_p_connection->prepareStatement(
                     "INSERT INTO " + m_TABLE_DEDUCTIBLES +
                     "("
-                    "fk_insurance, " 
-                    "fk_bonus, "
-                    "fk_age, "
-                    "model_name, "
-                    "deduc_1, "
-                    "deduc_2, "
-                    "deduc_3, "
-                    "deduc_4, "
-                    "deduc_5, "
-                    "deduc_6, "
-                    "region, "
-                    "accident"
+                    + m_DED_NAME + ", "
+                    + m_DED_DEDUCTIBLE_1 + ", "
+                    + m_DED_DEDUCTIBLE_2 + ", "
+                    + m_DED_DEDUCTIBLE_3 + ", "
+                    + m_DED_DEDUCTIBLE_4 + ", "
+                    + m_DED_DEDUCTIBLE_5 + ", "
+                    + m_DED_DEDUCTIBLE_6 + ", "
+                    + m_DED_REGION + ", "
+                    + m_DED_ACCIDENT + ", "
+                    + m_DED_FK_INSURANCE + ", " 
+                    + m_DED_FK_BONUS + ", "
+                    + m_DED_FK_AGE +
                     ") "
 
                     "VALUES(?,?,?,?,?,?,?,?,?,?,?,?) ")
             );
 
-            p_prep_statement->setInt(1, deductible.m_fk_insurance);
-            p_prep_statement->setInt(2, deductible.m_fk_bonus);
-            p_prep_statement->setInt(3, deductible.m_fk_age);
-            p_prep_statement->setString(4, deductible.m_model_name);
-            p_prep_statement->setDouble(5, deductible.m_deductible_1);
-            p_prep_statement->setDouble(6, deductible.m_deductible_2);
-            p_prep_statement->setDouble(7, deductible.m_deductible_3);
-            p_prep_statement->setDouble(8, deductible.m_deductible_4);
-            p_prep_statement->setDouble(9, deductible.m_deductible_5);
-            p_prep_statement->setDouble(10, deductible.m_deductible_6);
-            p_prep_statement->setInt(11, deductible.m_region);
-            p_prep_statement->setBoolean(12, deductible.m_accidents_risk);
+            p_prep_statement->setString(1, deductible.m_model_name);
+            p_prep_statement->setDouble(2, deductible.m_deductible_1);
+            p_prep_statement->setDouble(3, deductible.m_deductible_2);
+            p_prep_statement->setDouble(4, deductible.m_deductible_3);
+            p_prep_statement->setDouble(5, deductible.m_deductible_4);
+            p_prep_statement->setDouble(6, deductible.m_deductible_5);
+            p_prep_statement->setDouble(7, deductible.m_deductible_6);
+            p_prep_statement->setInt(8, deductible.m_region);
+            p_prep_statement->setBoolean(9, deductible.m_accidents_risk);
+            p_prep_statement->setInt(10, deductible.m_fk_insurance);
+            p_prep_statement->setInt(11, deductible.m_fk_bonus);
+            p_prep_statement->setInt(12, deductible.m_fk_age);
 
             p_prep_statement->execute();
         }
@@ -286,16 +312,16 @@ namespace db {
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
-                    "SELECT MIN(deduc_6)"
+                    "SELECT MIN(" + m_DED_DEDUCTIBLE_6 + ")"
                     " FROM " + m_TABLE_DEDUCTIBLES +
-                    " WHERE deduc_6 > 0;"
+                    " WHERE " + m_DED_DEDUCTIBLE_6 + " > 0;"
                 )
             );
 
             std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
 
             if (result->next()) {
-                return result->getDouble("MIN(deduc_6)");
+                return result->getDouble("MIN(" + m_DED_DEDUCTIBLE_6 + ")");
             }
         }
         catch (sql::SQLException& e) {
@@ -318,7 +344,7 @@ namespace db {
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
-                    "SELECT DISTINCT region"
+                    "SELECT DISTINCT " + m_DED_REGION +
                     " FROM " + m_TABLE_DEDUCTIBLES +
                     " ;"
                 )
@@ -328,7 +354,7 @@ namespace db {
 
             while (true) {
                 if (result->next()) {
-					regions.push_back(result->getInt("region"));
+					regions.push_back(result->getInt(m_DED_REGION));
                 }
                 else {
                     return regions;
@@ -353,7 +379,7 @@ namespace db {
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
-                    "SELECT MIN(start)"
+                    "SELECT MIN(" + m_AGE_MIN + ")"
                     " FROM " + m_TABLE_AGES +
                     " ;"
                 )
@@ -363,7 +389,7 @@ namespace db {
 
             while (true) {
                 if (result->next()) {
-					return result->getInt("MIN(start)");
+					return result->getInt("MIN(" + m_AGE_MIN + ")");
                 }
             }
         }
@@ -376,66 +402,132 @@ namespace db {
     }
 
 
-    std::vector<InsuranceIDAndDeductible>& SqlConnection::findAllCorrespondingDeductibles(const uint16_t deductible_level, const uint16_t age, const uint16_t region, const bool accident) {
-
+    std::vector<InsuranceIDAndDeductible> SqlConnection::findAllCorrespondingDeductibles(const uint16_t deductible_level, const uint16_t age, const uint16_t region, const bool accident) {
 
         std::vector<InsuranceIDAndDeductible> data_to_send;
+
         if (!isConnectionOpen()) {
             return data_to_send;
         }
 
-        data_to_send.reserve(100);
-        std::string field_to_check{ "deduc_1" };
+		std::string query{ "" };
 
         switch (deductible_level) {
         case 1:
-            field_to_check = "deduc_1, deduc_2";
+            data_to_send.reserve(40);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_2 + " AS value, '" + m_DED_DEDUCTIBLE_2 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_2 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_2 + " ASC LIMIT 20); ";
             break;
 
         case 2:
-            field_to_check = "deduc_1, deduc_2, deduc_3";
+            data_to_send.reserve(60);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_2 + " AS value, '" + m_DED_DEDUCTIBLE_2 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_2 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_2 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_3 + " AS value, '" + m_DED_DEDUCTIBLE_3 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_3 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_3 + " ASC LIMIT 20); ";
             break;
 
         case 3:
-            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, ";
+            data_to_send.reserve(80);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_2 + " AS value, '" + m_DED_DEDUCTIBLE_2 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_2 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_2 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_3 + " AS value, '" + m_DED_DEDUCTIBLE_3 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_3 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_3 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_4 + " AS value, '" + m_DED_DEDUCTIBLE_4 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_4 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_4 + " ASC LIMIT 20); ";
             break;
 
         case 4:
-            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, deduc_5";
+            data_to_send.reserve(100);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_2 + " AS value, '" + m_DED_DEDUCTIBLE_2 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_2 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_2 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_3 + " AS value, '" + m_DED_DEDUCTIBLE_3 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_3 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_3 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_4 + " AS value, '" + m_DED_DEDUCTIBLE_4 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_4 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_4 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_5 + " AS value, '" + m_DED_DEDUCTIBLE_5 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_5 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_5 + " ASC LIMIT 20); ";
             break;
 
         case 5:
-            field_to_check = "deduc_1, deduc_2, deduc_3, deduc_4, deduc_5, deduc_6";
+            data_to_send.reserve(120);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_2 + " AS value, '" + m_DED_DEDUCTIBLE_2 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_2 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_2 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_3 + " AS value, '" + m_DED_DEDUCTIBLE_3 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_3 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_3 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_4 + " AS value, '" + m_DED_DEDUCTIBLE_4 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_4 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_4 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_5 + " AS value, '" + m_DED_DEDUCTIBLE_5 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_5 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_5 + " ASC LIMIT 20) "
+                "UNION ALL"
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_6 + " AS value, '" + m_DED_DEDUCTIBLE_6 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_6 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_6 + " ASC LIMIT 20); ";
             break;
 
         default:
-            field_to_check = "deduc_1";
+            data_to_send.reserve(20);
+            query =
+                "(SELECT " + m_DED_ID + " AS id, " + m_DED_DEDUCTIBLE_1 + " AS value, '" + m_DED_DEDUCTIBLE_1 + "' AS column_name FROM " + m_TABLE_DEDUCTIBLES +
+                " WHERE " + m_DED_DEDUCTIBLE_1 + " > 0 ORDER BY " + m_DED_DEDUCTIBLE_1 + " ASC LIMIT 20); ";
             break;
         }
 
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
-                m_p_connection->prepareStatement(
-                    "SELECT id, " + field_to_check +
-                    " FROM " + m_TABLE_DEDUCTIBLES +
-                    " ORDER BY " + field_to_check + " ASC "
-                    " WHERE " + field_to_check + " > 0 " // TODO Error
-                    " LIMIT 100;"
-                )
+                m_p_connection->prepareStatement(query)
             );
 
             std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
 
-            if (result->next()) {
+
+            while (result->next()) {
                 
                 InsuranceIDAndDeductible data;
-                data.m_bonus = result->getInt(field_to_check);
+
                 data.m_id = result->getInt("id");
-                
+                data.m_bonus = result->getDouble("value");
+
+                std::string column_name = result->getString("column_name");
+                data.m_deductible = column_name.back() - '0'; // Return the last char of the column name has a digit
+
+#if DEBUG
+                std::cout << "ID: " << data.m_id << " Column: " << column_name << ", Value: " << data.m_bonus << '\n';
+#endif // DEBUG
+
                 data_to_send.push_back(data);
             }
 
             return data_to_send;
+
         }
         catch (sql::SQLException& e) {
             std::cerr << "SQL Error: " << e.what() << std::endl;
@@ -449,21 +541,21 @@ namespace db {
     // Return the insurance ID with the insurance name passed has parameter, or 0 if not found
     uint16_t SqlConnection::findInsuranceIDByName(const std::string& insurance_name) const {
 
-        return findIDInTableByName(m_TABLE_INSURANCES, insurance_name);
+        return findIDInTableByName(m_TABLE_INSURANCES, insurance_name, m_INS_NAME, m_INS_ID);
     }
 
 
     // Return the bonus ID with the bonus name passed has parameter, or 0 if not found
     uint16_t SqlConnection::findBonusIDByName(const std::string& bonus_name) const {
 
-        return findIDInTableByName(m_TABLE_BONUSES, bonus_name);
+        return findIDInTableByName(m_TABLE_BONUSES, bonus_name, m_BON_NAME, m_BON_ID);
     }
 
 
     // Return the age ID with the age name passed has parameter, or 0 if not found
     uint16_t SqlConnection::findAgeIDByName(const std::string& age_name) const {
 
-        return findIDInTableByName(m_TABLE_AGES, age_name);
+        return findIDInTableByName(m_TABLE_AGES, age_name, m_AGE_NAME, m_AGE_ID);
     }
 
 
@@ -573,7 +665,7 @@ namespace db {
 
 
 	// Return the Name inside a Table with the ID passed in parameter
-    std::string SqlConnection::findNameInTableByID(const std::string& table_name, const uint16_t id) const {
+    std::string SqlConnection::findNameInTableByID(const std::string& table_name, const uint16_t find_id, const std::string& column_name, const std::string& column_id) const {
 
         if (!isConnectionOpen()) {
             return "";
@@ -582,13 +674,13 @@ namespace db {
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
-                    "SELECT name"
+					"SELECT " + column_name + " AS name"
                     " FROM " + table_name +
-                    " WHERE id = ? ;"
+                    " WHERE " + column_id + " = ? ;"
                 )
             );
 
-            p_prep_statement->setInt(1, id);
+            p_prep_statement->setInt(1, find_id);
             std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
 
             if (result->next()) {
@@ -608,7 +700,7 @@ namespace db {
 
 
     // Return an ID by searching the name inside the Table passed in parameters
-    uint16_t SqlConnection::findIDInTableByName(const std::string& table_name, const std::string& name) const {
+    uint16_t SqlConnection::findIDInTableByName(const std::string& table_name, const std::string& find_name, const std::string& column_name, const std::string& column_id) const {
 
         if (!isConnectionOpen()) {
             return 0;
@@ -617,13 +709,13 @@ namespace db {
         try {
             std::unique_ptr<sql::PreparedStatement> p_prep_statement(
                 m_p_connection->prepareStatement(
-                    "SELECT id"
+                    "SELECT " + column_id + " AS id"
                     " FROM " + table_name +
-                    " WHERE name = ? ;"
+                    " WHERE " + column_name + " = ? ;"
                 )
             );
 
-            p_prep_statement->setString(1, name);
+            p_prep_statement->setString(1, find_name);
             std::unique_ptr<sql::ResultSet> result(p_prep_statement->executeQuery());
 
             if (result->next()) {

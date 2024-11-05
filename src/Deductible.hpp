@@ -45,7 +45,7 @@ namespace logic {
 		std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
 		std::string m_age_category{ "n/a" };
-		float m_deductible_values[glb::NBR_VALUES_PER_DEDUCTIBLE]{ 0.0f };
+		float m_deductible_values[global::NBR_DEDUCTIBLES_PER_INSURANCE]{ 0.0f };
 		uint16_t m_region{ 0 };
 		bool m_accidents_risk{ false };
 	};

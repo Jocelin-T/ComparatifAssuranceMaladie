@@ -9,7 +9,7 @@ namespace logic {
         std::cout << " Bonus name: " << m_bonus_name << '\n';
         std::cout << " Model name: " << m_model_name << '\n';
         std::cout << " Age category: " << m_age_category << '\n';
-        for (uint16_t i{ 0 }; i < glb::NBR_VALUES_PER_DEDUCTIBLE; i++) {
+        for (uint16_t i{ 0 }; i < global::NBR_DEDUCTIBLES_PER_INSURANCE; i++) {
             std::cout << " Deductibles values: " << m_deductible_values[i] << '\n';
         }
         std::cout << " Region: " << m_region << '\n';

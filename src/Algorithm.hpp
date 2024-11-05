@@ -13,15 +13,16 @@ namespace algo {
 	// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
 
 	struct AlgorithmParameters {
-		float user_choosed_maximum_fee{ 0.0f };
+		float user_choosed_max_fee{ 0.0f };
 		uint16_t user_choosed_region{ 999 };
 		uint16_t user_choosed_age{ 999 };
 		bool user_choosed_accident{ false };
 	};
 
-	inline const uint16_t ALGO_MAX_ENTRIES{ 100 };
-	inline uint16_t insurances_id[ALGO_MAX_ENTRIES];
-	inline uint16_t bonuses[ALGO_MAX_ENTRIES];
+	inline const uint16_t ALGO_MAX_ENTRIES{ 120 };
+	inline uint16_t insurances_ids_matching[ALGO_MAX_ENTRIES];
+	inline float bonuses_matching[ALGO_MAX_ENTRIES];
+	inline uint16_t deductibles_matching[ALGO_MAX_ENTRIES];
 
 	void runAlgorithm(const AlgorithmParameters& params);
 
@@ -33,6 +34,9 @@ namespace algo {
 	);
 
 	void findBestInsurance();
+
+
+	uint16_t calculateAllCosts(const uint16_t insurance_index, const AlgorithmParameters& params, const uint16_t fee);
 
 	// Debug function
 	void algorithmTest(void);

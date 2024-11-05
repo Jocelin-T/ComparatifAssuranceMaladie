@@ -28,10 +28,6 @@
 namespace db {
 
 	struct TableDeductible {
-		uint16_t m_id{ 0 };
-		uint16_t m_fk_insurance{ 0 };
-		uint16_t m_fk_bonus{ 0 };
-		uint16_t m_fk_age{ 0 };
 		std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
 		float m_deductible_1{ 0.0f };
@@ -40,13 +36,18 @@ namespace db {
 		float m_deductible_4{ 0.0f };
 		float m_deductible_5{ 0.0f };
 		float m_deductible_6{ 0.0f };
+		uint16_t m_id{ 0 };
+		uint16_t m_fk_insurance{ 0 };
+		uint16_t m_fk_bonus{ 0 };
+		uint16_t m_fk_age{ 0 };
 		uint16_t m_region{ 0 };
 		bool m_accidents_risk{ false };
 	};
 
 	struct InsuranceIDAndDeductible {
-		uint16_t m_id{ 0 };
 		float m_bonus{ 0.0f };
+		uint16_t m_id{ 0 };
+		uint16_t m_deductible{ 0 };
 	};
 	
 	class SqlConnection{
@@ -140,7 +141,7 @@ namespace db {
 		uint16_t findLowestAge(void) const;
 
 
-		std::vector<InsuranceIDAndDeductible>& findAllCorrespondingDeductibles(
+		std::vector<InsuranceIDAndDeductible> findAllCorrespondingDeductibles(
 			const uint16_t deductible_level,
 			const uint16_t age,
 			const uint16_t region,
@@ -165,8 +166,8 @@ namespace db {
 
 	private:
 
-		std::string findNameInTableByID(const std::string& table_name, const uint16_t id) const;
-		uint16_t findIDInTableByName(const std::string& table_name, const std::string& name) const;
+		std::string findNameInTableByID(const std::string& table_name, const uint16_t find_id, const std::string& column_name, const std::string& column_id) const;
+		uint16_t findIDInTableByName(const std::string& table_name, const std::string& find_name, const std::string& column_name, const std::string& column_id) const;
 		void connectToSqlDatabase(void);
 		bool isConnectionOpen(void) const;
 

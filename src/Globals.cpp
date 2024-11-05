@@ -1,7 +1,7 @@
 #include "Globals.hpp"
 #include <cctype>
 
-namespace glb {
+namespace global {
 
 	bool isStringNumeric(const std::string& str) {
 
