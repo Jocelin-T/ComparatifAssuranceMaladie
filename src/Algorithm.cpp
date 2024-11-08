@@ -22,40 +22,58 @@ namespace algo {
 				continue;
 			}
 
-			std::cout << i << " - ID: " << insurances_ids_matching[i] 
-				<< " Data: " << bonuses_matching[i] 
+			std::cout 
+				<< i 
+				<< " - ID: " << insurances_ids_matching[i] 
+				<< " Data: " << contributions_matching[i] 
 				<< " Deductible: " << deductibles_matching[i]
 				<< '\n';
 		}
 #endif // DEBUG
 
-		if (params.user_choosed_max_fee > 0) {
+		// Calculate the best insurance if the value given by the user is over the lowest deductible
+		if (params.user_choosed_max_fee > global::DEDUCTIBLES_POSSIBLE[0]) {
 
 			for (uint16_t i{ 0 }; i < global::NBR_DEDUCTIBLES_PER_INSURANCE; i++) {
 
 				float fee{ params.user_choosed_max_fee };
+				std::cout << "User max fee: " << fee << '\n';
 
-				fee - global::DEDUCTIBLES_POSSIBLE[i];
+				fee -= global::DEDUCTIBLES_POSSIBLE[i];
+				std::cout << "Max fee -deductible: " << fee << '\n';
 
 				if (fee <= 0) {
+					std::cout << "Break at: " << fee << " Deductible: " << global::DEDUCTIBLES_POSSIBLE[i] << '\n';
 					break;
 				}
 
-				fee - 700.0f;
+				fee -= global::MAX_SHARE;
+				std::cout << "Max fee -deductible & -max share: " << fee << '\n';
 
-				if (fee <= 0) {
+				if (fee <= 0 || i == global::NBR_DEDUCTIBLES_PER_INSURANCE - 1) {
+					std::cout << "Break at: " << fee << " Deductible: " << global::DEDUCTIBLES_POSSIBLE[i] << '\n';
 					break;
 				}
 
 
 			}
 		}
+		else {
+			// TODO: Get the lowest value Data(insurance_id, monthly_contribution, deductible) for the higher deductible
+			std::cout << "Lowest than the min deductible\n";
+		}
 
-		calculateAllCosts();
+
+		// TODO: Value to update
+		calculateAllCosts(0, params, 700);
 	}
 
 
-	AlgorithmParameters& setAlgorithmParameters(const float user_max_fee, const uint16_t user_region, const uint16_t user_age, const bool user_accident) {
+	AlgorithmParameters& setAlgorithmParameters(
+		const float user_max_fee,
+		const uint16_t user_region,
+		const uint16_t user_age,
+		const bool user_accident) {
 		
 		AlgorithmParameters params;
 
@@ -68,12 +86,15 @@ namespace algo {
 	}
 
 
-	uint16_t calculateAllCosts(const uint16_t insurance_index, const AlgorithmParameters& params, const uint16_t fee) {
+	uint16_t calculateAllCosts(const uint16_t matching_index, const AlgorithmParameters& params, const float fee) {
+
+		uint16_t deductible{ deductibles_matching[matching_index] };
+		float monthly_contribution{ contributions_matching[matching_index] };
 
 
-
-		return 0;
+		return monthly_contribution * 12;
 	}
+
 
 	void algorithmTest(void) {
 

@@ -21,10 +21,10 @@ namespace algo {
 
 	inline const uint16_t ALGO_MAX_ENTRIES{ 120 };
 	inline uint16_t insurances_ids_matching[ALGO_MAX_ENTRIES];
-	inline float bonuses_matching[ALGO_MAX_ENTRIES];
+	inline float contributions_matching[ALGO_MAX_ENTRIES];
 	inline uint16_t deductibles_matching[ALGO_MAX_ENTRIES];
 
-	void runAlgorithm(const AlgorithmParameters& params);
+	void runAlgorithm(const AlgorithmParameters& params); // TODO: Return the ID of the best insurance
 
 	AlgorithmParameters& setAlgorithmParameters(
 		const float user_max_fee,
@@ -36,7 +36,11 @@ namespace algo {
 	void findBestInsurance();
 
 
-	uint16_t calculateAllCosts(const uint16_t insurance_index, const AlgorithmParameters& params, const uint16_t fee);
+	uint16_t calculateAllCosts(
+		const uint16_t matching_index,
+		const AlgorithmParameters& params,
+		const float fee
+	);
 
 	// Debug function
 	void algorithmTest(void);

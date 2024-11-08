@@ -37,7 +37,7 @@
 //uint16_t saveHealthInsuranceInDatabase(std::string& my_string = "example", const HealthInsurance& insurance);
 
 
-namespace global{
+namespace global {
 	inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // CSV without children, cause there is 2 more columns
 	//inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
 
@@ -45,25 +45,29 @@ namespace global{
 	inline const uint16_t NBR_COLUMN_IN_CSV_FILE{ 13 };
 
 	inline const uint16_t DEDUCTIBLES_POSSIBLE[NBR_DEDUCTIBLES_PER_INSURANCE]{ 300,500,1000,1500,2000,2500 };
+	inline const float MIN_SHARE{ 0.0f };
+	inline const float MAX_SHARE{ 700.0f };
+	inline const float QUOTA{ 0.1f }; // quote-part 10%
 
 
+	namespace function {
 
-	// @brief Checks if a string represents a valid numeric value.
-	//
-	// This function examines the input string to determine if it represents
-	// a valid numeric value. It allows for integers, decimal numbers, and
-	// negative numbers. The function considers the following as valid:
-	// - Digits (0-9)
-	// - A single decimal point (.)
-	// - A single negative sign (-) at the beginning
-	//
-	// @param str (const std::string&) => The string to be checked for numeric content.
-	//
-	// @return (bool)                  => true if the string represents a valid numeric value,
-	//                                    false otherwise.
-	//
-	bool isStringNumeric(const std::string& string);
+		// @brief Checks if a string represents a valid numeric value.
+		//
+		// This function examines the input string to determine if it represents
+		// a valid numeric value. It allows for integers, decimal numbers, and
+		// negative numbers. The function considers the following as valid:
+		// - Digits (0-9)
+		// - A single decimal point (.) not as first character
+		// - A single negative sign (-) at the beginning
+		//
+		// @param str (const std::string&) => The string to be checked for numeric content.
+		//
+		// @return (bool)                  => true if the string represents a valid numeric value,
+		//                                    false otherwise.
+		bool isStringNumeric(const std::string& string);
 
+	} // namespace global::function
 } // namespace global
 
 

@@ -9,7 +9,7 @@ namespace user {
 
 		std::cin >> input;
 
-		if (!global::isStringNumeric(input)) {
+		if (!global::function::isStringNumeric(input)) {
 			system("cls");
 			std::cout << "Your entry isn't numeric\n\n";
 			return 0;
@@ -38,7 +38,7 @@ namespace user {
 			std::cout << "Enter the maximum fee (without bonus) you think you gonna pay this year: ";
 			std::cin >> input;
 
-			if (!global::isStringNumeric(input)) {
+			if (!global::function::isStringNumeric(input)) {
 				system("cls");
 				std::cout << "Your entry isn't numeric\n\n";
 				continue;
@@ -71,7 +71,7 @@ namespace user {
 			}
 			std::cin >> input;
 
-			if (!global::isStringNumeric(input)) {
+			if (!global::function::isStringNumeric(input)) {
 				system("cls");
 				std::cout << "Your entry isn't numeric\n\n";
 				continue;
@@ -82,11 +82,11 @@ namespace user {
 			for (const uint16_t region : array_regions) {
 
 				// Entry exist
-				if (user_region == region ) {
+				if (user_region == region) {
 					return user_region;
 				}
 			}
-			
+
 			system("cls");
 			std::cout << "Your entry isn't available \n\n";
 			user_region = -99;
@@ -105,7 +105,7 @@ namespace user {
 			std::cout << "Enter your age (min: " << min_age << "): ";
 			std::cin >> input;
 
-			if (!global::isStringNumeric(input)) {
+			if (!global::function::isStringNumeric(input)) {
 				system("cls");
 				std::cout << "Your entry isn't numeric\n\n";
 				continue;

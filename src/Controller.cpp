@@ -26,7 +26,7 @@ namespace ctrl {
         using namespace algo;
 
         bool app_runing{ true };
-        uint16_t user_choice{ 0 };
+        uint16_t user_choice{ 4 }; // TODO change init to 0 (for debug only)
         SqlConnection connect;
 
         while (app_runing) {
@@ -53,9 +53,10 @@ namespace ctrl {
                         askUserMaximumFee(),
                         askUserRegion(connect.findAllDifferentRegions()),
                         askUserAge(connect.findLowestAge()),
-                        askUserAccident());
+                        askUserAccident()
+                    );
 
-                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, bonuses_matching, deductibles_matching);
+                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, contributions_matching, deductibles_matching);
 
                     runAlgorithm(params);
                 }
@@ -82,7 +83,19 @@ namespace ctrl {
 
             case 4:// TODO: make a function
 
-                std::cout << connect.findLowestAge() << '\n';
+                user_choice = 1;
+                if (user_choice == 1) {
+                    AlgorithmParameters params = setAlgorithmParameters(
+                        800,
+                        1,
+                        20,
+                        1
+                    );
+
+                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, contributions_matching, deductibles_matching);
+
+                    runAlgorithm(params);
+                }
 
                 user_choice = 0;
                 break;
@@ -385,7 +398,7 @@ namespace ctrl {
         uint16_t deductible_level{ 5 }; 
         std::vector<InsuranceIDAndDeductible> data_from_db;
 
-        // TODO: useless maybe, else change deductible_level to 0
+        // TODO: useless maybe, else change init of [deductible_level] to 0
         //if (params.user_choosed_max_fee > 0) {
         //    for (uint16_t i{ 1 }; i < global::NBR_DEDUCTIBLES_PER_INSURANCE; i++) {
 
