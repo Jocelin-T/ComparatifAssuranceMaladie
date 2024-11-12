@@ -14,13 +14,14 @@
 	TODO:
 		- 
 
-	TO FIX:
+	FIX:
 		-
 */
 
-// To generate code with Tabnine:
+// To generate code with TabNine:
 
-// Can you write the comment for this function in the same style 
+// Can you write the comment for the function [INSERT_FUNCTION_SIGNATURE] 
+//  located at line [INSERT_LINE] in the file [INSERT_FILE] in the same style 
 //	(the data type of the parameters and return between (),
 //	the sign => who are aligned in the same column) as below:
 // 
@@ -38,16 +39,19 @@
 
 
 namespace global {
-	inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Test.csv" }; // CSV without children, cause there is 2 more columns
-	//inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\x64\\Release\\2024_Canton.VD.csv" };
 
-	inline const uint16_t NBR_DEDUCTIBLES_PER_INSURANCE{ 6 };
-	inline const uint16_t NBR_COLUMN_IN_CSV_FILE{ 13 };
+	inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\ressources\\2024_Test.csv" }; // CSV without children, cause there is 2 more columns
+	//inline std::string path{ "C:\\Users\\ThJo\\source\\repos\\ComparatifAssuranceMaladie\\ressources\\2024_Canton.VD.csv" };
 
-	inline const uint16_t DEDUCTIBLES_POSSIBLE[NBR_DEDUCTIBLES_PER_INSURANCE]{ 300,500,1000,1500,2000,2500 };
-	inline const float MIN_SHARE{ 0.0f };
-	inline const float MAX_SHARE{ 700.0f };
-	inline const float QUOTA{ 0.1f }; // quote-part 10%
+	inline constexpr uint16_t NBR_DEDUCTIBLES_PER_INSURANCE{ 6 };
+	inline constexpr uint16_t NBR_COLUMN_IN_CSV_FILE{ 13 };
+
+	inline constexpr uint16_t DEDUCTIBLES_POSSIBLE[NBR_DEDUCTIBLES_PER_INSURANCE]{ 300,500,1000,1500,2000,2500 };
+	inline constexpr float MIN_SHARE{ 0.0f };
+	inline constexpr float MAX_SHARE{ 700.0f };
+	inline constexpr float QUOTA{ 0.1f }; // quote-part 10%
+
+	inline constexpr uint16_t NBR_RESULT_PER_DEDUCTIBLE{ 20 };
 
 
 	namespace function {

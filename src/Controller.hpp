@@ -173,9 +173,19 @@ namespace ctrl {
 	void populateArraysOfAlgorithm(
 		const AlgorithmParameters& params,
 		SqlConnection& connection,
-		uint16_t* array_insurances_id,
-		float* array_bonuses, 
+		uint16_t* array_deductibles_ids,
+		float* array_constributions,
 		uint16_t* array_deductibles
+	);
+
+
+	void displayBestInsuranceAlgoFound(
+		const AlgorithmParameters& params, 
+		SqlConnection& connection, 
+		const uint16_t deductible_id,
+		const float* array_constributions,
+		const uint16_t* array_deductibles,
+		const uint16_t matching_id
 	);
 
 

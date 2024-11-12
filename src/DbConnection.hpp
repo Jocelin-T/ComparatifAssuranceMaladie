@@ -22,13 +22,12 @@
 #include <cppconn/resultset_metadata.h>
 
 #include "Typedef.hpp"
-#include "Globals.hpp"
 
 
 namespace db {
 
 	struct TableDeductible {
-		std::string m_bonus_name{ "n/a" };
+		//std::string m_bonus_name{ "n/a" };
 		std::string m_model_name{ "n/a" }; // can be empty
 		float m_deductible_1{ 0.0f };
 		float m_deductible_2{ 0.0f };
@@ -45,7 +44,7 @@ namespace db {
 	};
 
 	struct InsuranceIDAndDeductible {
-		float m_bonus{ 0.0f };
+		float m_contribution{ 0.0f };
 		uint16_t m_id{ 0 };
 		uint16_t m_deductible{ 0 };
 	};
@@ -157,6 +156,14 @@ namespace db {
 		uint16_t findAgeIDByName(const std::string& age_name) const;
 
 		
+		TableDeductible findDeductibleDataWithID(const uint16_t deductible_id) const;
+
+		std::string findInsuranceNameWithID(const uint16_t insurance_id) const;
+
+		std::string findBonusNameWithID(const uint16_t bonus_id) const;
+
+		std::string findAgeCategoryWithID(const uint16_t age_id) const;
+
 
 		void displayAllTableData(void);
 		void displayAllDataFromOneTable(const std::string& table_name);
@@ -166,9 +173,24 @@ namespace db {
 
 	private:
 
-		std::string findNameInTableByID(const std::string& table_name, const uint16_t find_id, const std::string& column_name, const std::string& column_id) const;
-		uint16_t findIDInTableByName(const std::string& table_name, const std::string& find_name, const std::string& column_name, const std::string& column_id) const;
+		uint16_t findCorrespondingAgeID(const uint16_t age);
+
+		std::string findNameInTableByID(
+			const std::string& table_name,
+			const uint16_t find_id,
+			const std::string& column_name,
+			const std::string& column_id
+		) const;
+
+		uint16_t findIDInTableByName(
+			const std::string& table_name,
+			const std::string& find_name,
+			const std::string& column_name,
+			const std::string& column_id
+		) const;
+
 		void connectToSqlDatabase(void);
+
 		bool isConnectionOpen(void) const;
 
 		sql::Driver* m_p_driver; // raw ptr returned by the C++ Connector lib

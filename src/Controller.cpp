@@ -28,6 +28,7 @@ namespace ctrl {
         bool app_runing{ true };
         uint16_t user_choice{ 4 }; // TODO change init to 0 (for debug only)
         SqlConnection connect;
+        AlgorithmParameters params;
 
         while (app_runing) {
 
@@ -45,25 +46,30 @@ namespace ctrl {
                 break;
 
             case 1: // Algorithm
-                //user_choice = listUserChoices(choices_algorithm);
-                user_choice = 1;
 
-                if (user_choice == 1) {
-                    AlgorithmParameters params = setAlgorithmParameters(
-                        askUserMaximumFee(),
-                        askUserRegion(connect.findAllDifferentRegions()),
-                        askUserAge(connect.findLowestAge()),
-                        askUserAccident()
-                    );
+                params = setAlgorithmParameters(
+                    askUserMaximumFee(),
+                    askUserRegion(connect.findAllDifferentRegions()),
+                    askUserAge(connect.findLowestAge()),
+                    askUserAccident()
+                );
 
-                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, contributions_matching, deductibles_matching);
-
-                    runAlgorithm(params);
-                }
-
-                if (user_choice == 2) {
-                    algorithmTest();
-                }
+                populateArraysOfAlgorithm(
+                    params,
+                    connect,
+                    deductibles_ids_matching,
+                    contributions_matching,
+                    deductibles_matching
+                );
+                
+                displayBestInsuranceAlgoFound(
+                    params,
+                    connect,
+                    runAlgorithm(params),
+                    contributions_matching, 
+                    deductibles_matching,
+                    array_matching_id
+                );
 
                 user_choice = 0;
                 break;
@@ -83,20 +89,30 @@ namespace ctrl {
 
             case 4:// TODO: make a function
 
-                user_choice = 1;
-                if (user_choice == 1) {
-                    AlgorithmParameters params = setAlgorithmParameters(
-                        800,
-                        1,
-                        20,
-                        1
-                    );
+                params = setAlgorithmParameters(
+                    6350,
+                    2,
+                    30,
+                    0
+                );
 
-                    populateArraysOfAlgorithm(params, connect, insurances_ids_matching, contributions_matching, deductibles_matching);
+                populateArraysOfAlgorithm(
+                    params,
+                    connect,
+                    deductibles_ids_matching,
+                    contributions_matching,
+                    deductibles_matching
+                );
 
-                    runAlgorithm(params);
-                }
-
+                displayBestInsuranceAlgoFound(
+                    params,
+                    connect,
+                    runAlgorithm(params),
+                    contributions_matching,
+                    deductibles_matching,
+                    array_matching_id
+                );
+                
                 user_choice = 0;
                 break;
 
@@ -393,16 +409,23 @@ namespace ctrl {
     }
 
 
-    void populateArraysOfAlgorithm(const AlgorithmParameters& params, SqlConnection& connection, uint16_t* array_insurances_id, float* array_bonuses, uint16_t* array_deductibles) {
+    void populateArraysOfAlgorithm(
+        const AlgorithmParameters& params,
+        SqlConnection& connection,
+        uint16_t* array_deductibles_ids,
+        float* array_constributions,
+        uint16_t* array_deductibles) {
         
+        algo::clearAlgorithmArrays();
+
         uint16_t deductible_level{ 5 }; 
         std::vector<InsuranceIDAndDeductible> data_from_db;
 
         // TODO: useless maybe, else change init of [deductible_level] to 0
-        //if (params.user_choosed_max_fee > 0) {
+        //if (params.user_choosed_prediction_fee > 0) {
         //    for (uint16_t i{ 1 }; i < global::NBR_DEDUCTIBLES_PER_INSURANCE; i++) {
 
-        //        if (params.user_choosed_max_fee > global::DEDUCTIBLES_POSSIBLE[i]) {
+        //        if (params.user_choosed_prediction_fee > global::DEDUCTIBLES_POSSIBLE[i]) {
         //            deductible_level++;
         //        }
         //    }
@@ -421,18 +444,59 @@ namespace ctrl {
 #if DEBUG
             std::cout << "Loop " << i 
                 << " - ID: " << data_from_db[i].m_id 
-                << " Data: " << data_from_db[i].m_bonus 
+                << " Data: " << data_from_db[i].m_contribution 
                 << " Deductible: " << global::DEDUCTIBLES_POSSIBLE[data_from_db[i].m_deductible]
                 << '\n';
 #endif // DEBUG
 
-            array_insurances_id[i] = data_from_db[i].m_id;
-            array_bonuses[i] = data_from_db[i].m_bonus;
+            array_deductibles_ids[i] = data_from_db[i].m_id;
+            array_constributions[i] = data_from_db[i].m_contribution;
             array_deductibles[i] = global::DEDUCTIBLES_POSSIBLE[data_from_db[i].m_deductible];
         }
     }
 
 
+    void displayBestInsuranceAlgoFound(
+        const AlgorithmParameters& params,
+        SqlConnection& connect,
+        const uint16_t deductible_id,
+        const float* array_constributions,
+        const uint16_t* array_deductibles,
+        const uint16_t matching_id) {
+
+        TableDeductible data_from_db{ connect.findDeductibleDataWithID(deductible_id) };
+
+        std::cout << "Matching ID >>>>>>>>>>> " << matching_id << '\n';
+
+        float annual_fee{
+            (params.user_choosed_prediction_fee <= array_deductibles[matching_id] ? params.user_choosed_prediction_fee : array_deductibles[matching_id])
+            + (params.user_choosed_prediction_fee * global::QUOTA) + (array_constributions[matching_id] * 12)
+        };
+
+        // 6350
+        std::cout 
+            << "\n---------------------------------------------------------"
+            << "\nUser age                  -> " << params.user_choosed_age
+            << "\nUser region               -> " << params.user_choosed_region
+            << "\nUser with accident risk   -> " << (params.user_choosed_accident == 0 ? "No" : "Yes")
+            << "\nUser predicted annual fee -> " << params.user_choosed_prediction_fee
+            << "\nBest insurance ID found:     " << deductible_id
+            << "\nInsurance name:              " << connect.findInsuranceNameWithID(data_from_db.m_fk_insurance)
+            << "\nBonus name:                  " << connect.findBonusNameWithID(data_from_db.m_fk_bonus)
+			<< "\nAge category:                " << connect.findAgeCategoryWithID(data_from_db.m_fk_age)
+			<< "\nModel name:                  " << data_from_db.m_model_name
+			<< "\nRegion:                      " << data_from_db.m_region
+			<< "\nAccident risk:               " << data_from_db.m_accidents_risk
+            << "\n========================================================="
+            << "\n--Details--"
+            << "\nDeductible:                  " << (params.user_choosed_prediction_fee < array_deductibles[matching_id] ? params.user_choosed_prediction_fee : array_deductibles[matching_id]) << " CHF"
+            << "\nShare:                       " << (params.user_choosed_prediction_fee * global::QUOTA) << " CHF"
+            << "\nYearly Contributions :       " << (array_constributions[matching_id] * 12) << " CHF (12 * " << array_constributions[matching_id] << ")"
+            << "\n--TOTAL--"
+            << "\nNext year you should pay:    " << annual_fee << " CHF"
+            << "\n---------------------------------------------------------"
+            << '\n';
+    }
 
 
 } // namespace ctrl

@@ -8,23 +8,23 @@
 #pragma once
 
 #include "Typedef.hpp"
+#include "Globals.hpp"
 
 namespace algo {
-	// TODO: Use Data Oriented Design (DOD), will be better for the Algorithm
 
 	struct AlgorithmParameters {
-		float user_choosed_max_fee{ 0.0f };
+		float user_choosed_prediction_fee{ 0.0f };
 		uint16_t user_choosed_region{ 999 };
 		uint16_t user_choosed_age{ 999 };
 		bool user_choosed_accident{ false };
 	};
 
-	inline const uint16_t ALGO_MAX_ENTRIES{ 120 };
-	inline uint16_t insurances_ids_matching[ALGO_MAX_ENTRIES];
+	// Use Data Oriented Design (DOD), will be better for the Algorithm
+	inline constexpr uint16_t ALGO_MAX_ENTRIES{ global::NBR_DEDUCTIBLES_PER_INSURANCE * global::NBR_RESULT_PER_DEDUCTIBLE };
 	inline float contributions_matching[ALGO_MAX_ENTRIES];
+	inline uint16_t deductibles_ids_matching[ALGO_MAX_ENTRIES];
 	inline uint16_t deductibles_matching[ALGO_MAX_ENTRIES];
-
-	void runAlgorithm(const AlgorithmParameters& params); // TODO: Return the ID of the best insurance
+	inline uint16_t array_matching_id{ 0 };
 
 	AlgorithmParameters& setAlgorithmParameters(
 		const float user_max_fee,
@@ -33,17 +33,12 @@ namespace algo {
 		const bool user_accident
 	);
 
-	void findBestInsurance();
+	void clearAlgorithmArrays(void);
+
+	// Return the ID of the best deductible
+	uint16_t runAlgorithm(const AlgorithmParameters& params);
 
 
-	uint16_t calculateAllCosts(
-		const uint16_t matching_index,
-		const AlgorithmParameters& params,
-		const float fee
-	);
-
-	// Debug function
-	void algorithmTest(void);
 
 } // namespace algo
 
